@@ -2,23 +2,32 @@
 <html data-ng-app="domang">
   <head>
     <title>domang</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
-    <!-- <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script> -->
-    <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
-    <!-- <script src="app.js"></script> -->
+    <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script> -->
+    <!-- <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script> -->
+    <script src="libs/angular/angular.min.js"></script>
+    <script src="libs/leaflet/dist/leaflet.js"></script>
+    <script src="libs/angular-simple-logger/dist/angular-simple-logger.js"></script>
+    <script src="libs/ui-leaflet/dist/ui-leaflet.min.js"></script>
+    <script src="app.js"></script>
     <style>
       #map { height: 360px; width: 480px; background: white; }
-      #dashboards { background: white; }
+      #dashboard { background: white; }
       body { background: gray; };
     </style>
   </head>
-  <body data-ng-controller="MapController as map">
-    <h1>hey there</h1>
-    <div id="dasboards">
-
+  <body data-ng-controller="MapController">
+    <div id="dashboard" style="width: 20%;">
+      <h1>tada</h1>
+      <form>
+        Lat: <input type="number" step="any" ng-model="center.lat" /><br />
+        Lng: <input type="number" step="any" ng-model="center.lng" /><br />
+        Zoom: <input type="number" step="any" ng-model="center.zoom" /><br />
+      </form>
     </div>
-    <div id="map"></div>
-    <script src="script.js"></script>
+    <leaflet markers="markers" center="center" width="80%" height="480px"></leaflet>
+    <!-- <script src="script.js"></script> -->
   </body>
 </html>

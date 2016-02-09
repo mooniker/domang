@@ -9,11 +9,13 @@ try { // check if local env.js exists for dev server
 var express = require('express');
 var path = require('path');
 var pathToPublic = path.join(__dirname, 'public');
+var pathToLibs = path.join(__dirname, 'bower_components');
 
 var app = express();
 var helpers = require('./helpers');
 
 app.use(express.static(pathToPublic));
+app.use('/libs', express.static(pathToLibs));
 
 app.get('/ping', function(request, response) {
   response.json({ body: 'pong' });
