@@ -13,21 +13,40 @@
     <script src="libs/ui-leaflet/dist/ui-leaflet.min.js"></script>
     <script src="app.js"></script>
     <style>
-      #map { height: 360px; width: 480px; background: white; }
-      #dashboard { background: white; }
+      #map {
+        height: 100%;
+        width: 70%;;
+        background: white;
+        position: absolute;
+        right: 0;
+        top:0;
+      }
+      #dashboard {
+        background: white;
+        width: 28%;
+      }
       body { background: gray; };
     </style>
   </head>
-  <body data-ng-controller="MapController">
-    <div id="dashboard" style="width: 20%;">
-      <h1>tada</h1>
-      <form>
-        Lat: <input type="number" step="any" ng-model="center.lat" /><br />
-        Lng: <input type="number" step="any" ng-model="center.lng" /><br />
-        Zoom: <input type="number" step="any" ng-model="center.zoom" /><br />
-      </form>
-    </div>
-    <leaflet markers="markers" center="center" width="80%" height="480px"></leaflet>
+  <body data-ng-controller="MapController as map">
+    <main class="row">
+      <div id="dashboard" class="col">
+        <h1>tada</h1>
+        <form>
+          Lat: <input type="number" step="any" ng-model="center.lat" /><br />
+          Lng: <input type="number" step="any" ng-model="center.lng" /><br />
+          Zoom: <input type="number" step="any" ng-model="center.zoom" /><br />
+        </form>
+        <button data-ng-click="map.setLocationToLondon()">London</button>
+        <button data-ng-click="map.setLocationToPentagon()">Pentagon</button>
+        <button data-ng-click="map.addCenterMarker()">Center</button>
+        <button data-ng-click="map.updateBuses()">Update</button>
+      </div>
+      <div class="col">
+        <leaflet markers="markers" center="center" id="map"></leaflet>
+        <bus-stop data-ng-repeat="stop in map.busStops"></bus-stop>
+      </div>
+    </main>
     <!-- <script src="script.js"></script> -->
   </body>
 </html>

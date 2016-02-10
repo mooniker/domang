@@ -1,0 +1,16 @@
+<div>
+  <h4 title="{{stop.StopID}}">{{stop.StopName}}</h4>
+  <table data-ng-if="stop.Predictions.length > 0">
+    <th>
+      <td>min</td>
+      <td>rt</td>
+      <td>dir</td>
+    </th>
+    <tr data-ng-repeat="prediction in stop.Predictions">
+      <td>{{prediction.Minutes}}</td>
+      <td>{{prediction.RouteID}}</td>
+      <td>{{prediction.DirectionText}}</td>
+    </tr>
+  </table>
+  <p data-ng-if="stop.Predictions.length == 0">No predictions</p>
+</div>
