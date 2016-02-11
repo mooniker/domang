@@ -9,7 +9,7 @@
     $scope.center = {
       lat: 38.8710,
       lng: -77.0560,
-      zoom: 16
+      zoom: 17
     };
 
     $scope.eventDetected = "No events yet...";
@@ -133,17 +133,29 @@
       });
     };
 
+    this.places = {
+      pentagon: {
+        lat: 38.8690011,
+        lng: -77.0544217
+      },
+      mcPhersonSq: {
+        lat: 38.9020327,
+        lng: -77.0339576
+      },
+      farragutSq: {
+        lat: 38.9019,
+        lng: -77.0390
+      }
+    }
+
+    this.goTo = function(place) {
+      $scope.center.lat = this.places[place].lat;
+      $scope.center.lng = this.places[place].lng;
+    };
+
     this.goToLocation = function(lat, lng) {
       $scope.center.lat = lat;
       $scope.center.lng = lng;
-    };
-
-    this.setLocationToLondon = function() {
-      this.goToLocation(51.5072, -0.1275);
-    };
-
-    this.setLocationToPentagon = function() {
-      this.goToLocation(38.8710, -77.0560);
     };
 
   }]);

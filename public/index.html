@@ -46,9 +46,9 @@
           Lng: <input type="number" step="any" data-ng-model="center.lng" /><br />
           Zoom: <input type="number" step="any" data-ng-model="center.zoom" /><br />
         </form>
-        <button data-ng-click="map.setLocationToLondon()">London</button>
-        <button data-ng-click="map.setLocationToPentagon()">Pentagon</button>
-        <button data-ng-click="map.updateNearbyBusStops()">Update</button>
+        <button data-ng-click="map.goTo('mcPhersonSq')">McPherson Sq</button>
+        <button data-ng-click="map.goTo('pentagon')">Pentagon</button>
+        <button data-ng-click="map.goTo('farragutSq')">Farragut Sq</button>
         <bus-stop data-ng-repeat="stop in busStopData"></bus-stop>
       </div>
       <div class="col">
