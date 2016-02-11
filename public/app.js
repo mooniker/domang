@@ -6,21 +6,46 @@
 
   app.controller('MapController', ['$scope', '$http', 'leafletMapEvents', function($scope, $http, leafletMapEvents) {
 
-    $scope.center = {
-      lat: 38.8710,
-      lng: -77.0560,
-      zoom: 17
-    };
+    angular.extend($scope, {
+      center: {
+        lat: 38.9020327,
+        lng: -77.0339576,
+        zoom: 17
+      },
+      defaults: {
+        scrollWheelZoom: false
+      },
+      events: {
+        markers: {
+          enable: ['click'],
+          logic: 'emit'
+        }
+      }
+    });
+
+    // $scope.center = {
+    //   lat: 38.9020327,
+    //   lng: -77.0339576,
+    //   zoom: 17
+    // };
 
     $scope.eventDetected = "No events yet...";
     var mapEvents = leafletMapEvents.getAvailableMapEvents();
     for (var k in mapEvents){
       var eventName = 'leafletDirectiveMap.' + mapEvents[k];
       $scope.$on(eventName, function(event){
-          $scope.eventDetected = event.name;
-          // console.log(event.name);
+        $scope.eventDetected = event.name;
+        // console.log(event.name);
       });
     }
+
+    $scope.$on('leafletDirectiveMarker.click', function(e, args) {
+      // Args will contain the marker name and other relevant information
+      // console.log("Leaflet Click", e, args);
+      // make the bus stop display on the dashboard
+      $scope.busStopData[args.modelName].display = !$scope.busStopData[args.modelName].display;
+      console.log('Toggled bus stop', args.modelName, 'now', $scope.busStopData[args.modelName].display);
+    });
 
     var local_icons = {
       default_icon: {},
@@ -47,22 +72,24 @@
     $scope.addStopMarker = function(stopId, lat, lng, stopName) {
       $scope.markers[stopId] = {
         lat: lat,
-        lng, lng,
+        lng: lng,
         title: stopName,
         draggable: false,
         clickable: true,
         keyboard: true,
         riseOnHover: true,
         message: stopName,
-        icon: local_icons.bus_stop_icon
-      }
-    }
+        icon: local_icons.bus_stop_icon,
+        events: {}
+      };
+    };
 
     $scope.clearMarkers = function() {
       $scope.markers = {};
     };
 
     $scope.busStopData = {};
+    // $scope.busStopData = [];
 
     var map = this;
     this.busStops = [];
@@ -101,7 +128,10 @@
         // map.busStops = response.data;
         // map.markBusStops();
         for (var i = 0; i < response.data.length; i++) {
-          $scope.busStopData[response.data[i]['StopID']] = response.data[i];
+          var data = response.data[i];
+          data.display = false;
+          $scope.busStopData[response.data[i]['StopID']] = data; // if busStopData were a hash
+          // $scope.busStopData.push(data); // if busStopData were an array
         }
         map.markBusStops();
       }, function errorCallback(response) {
@@ -122,7 +152,7 @@
         lat: 38.9019,
         lng: -77.0390
       }
-    }
+    };
 
     this.goTo = function(place) {
       $scope.center.lat = this.places[place].lat;
