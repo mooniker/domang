@@ -90,7 +90,7 @@ module.exports = {
         for (let i = 0; i < stops.length; i++) {
           this.getNextBuses(stops[i]['StopID'], function(error, json) {
             count--;
-            if (error) console.error(error);
+            if (error) console.error('ERROR in getNextBusesNear:', error);
             if (json) {
               json['StopID'] = stops[i]['StopID'];
               json['Lon'] = stops[i]['Lon'];

@@ -64,13 +64,13 @@ app.get('/bang', function(request, response) {
 });
 
 app.get('/nextbus/:lat/:lon/:rad', function(request, response) {
+  console.log('Next bus request received:', request.params.lat, request.params.lon, request.params.rad);
   wmata.getNextBusesNear(request.params.lat, request.params.lon, request.params.rad, function(error, json) {
     if (error) {
       response.json({ error: error });
-      console.error(error);
+      console.error('ERROR:', error);
     } else response.json(json);
   });
-
 });
 
 
