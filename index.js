@@ -46,15 +46,15 @@ app.get('/bang', function(request, response) {
   //   }
   // });
 
-  wmata.getNextBusesNear(pentagonLat, pentagonLon, 500, function(error, json) {
-    if (error) response.json({ error: error});
-    else response.json(json);
-  });
-
-  // wmata.getPathDetails('18P', function(error, json) {
-  //   if (error) response.json({ error: error });
+  // wmata.getNextBusesNear(pentagonLat, pentagonLon, 500, function(error, json) {
+  //   if (error) response.json({ error: error});
   //   else response.json(json);
   // });
+
+  wmata.getPathDetails('18P', function(error, json) {
+    if (error) response.json({ error: error });
+    else response.json(json);
+  });
 
   // wmata.getBusPosition('29W', pentagonLat, pentagonLon, 10000, function(error, json) {
   //   if (error) response.json({ error: error });
