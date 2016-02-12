@@ -23,11 +23,21 @@
       }
     });
 
-    // $scope.center = {
-    //   lat: 38.9020327,
-    //   lng: -77.0339576,
-    //   zoom: 17
-    // };
+    var local_icons = {
+      default_icon: {},
+      brown_bus_stop_icon: {
+        iconUrl: '/icons/brown/busstop.png',
+        iconSize: [32, 37],
+        iconAnchor: [16, 1],
+      },
+      blue_bus_stop_icon: {
+        iconUrl: '/icons/blue/busstop.png',
+        iconSize: [32, 37],
+        iconAnchor: [16, 1]
+      }
+    };
+
+    $scope.icons = local_icons;
 
     $scope.eventDetected = "No events yet...";
     var mapEvents = leafletMapEvents.getAvailableMapEvents();
@@ -45,18 +55,14 @@
       // make the bus stop display on the dashboard
       $scope.busStopData[args.modelName].display = !$scope.busStopData[args.modelName].display;
       console.log('Toggled bus stop', args.modelName, 'now', $scope.busStopData[args.modelName].display);
-    });
-
-    var local_icons = {
-      default_icon: {},
-      bus_stop_icon: {
-        iconUrl: '/icons/busstop.png',
-        iconSize: [32, 37],
-        iconAnchar: [16, 1],
+      console.log($scope.markers[args.modelName]);
+      // $scope.markers[args.modelName].icon = local_icons.blue_bus_stop_icon;
+      if ($scope.busStopData[args.modelName].display) {
+        $scope.markers[args.modelName].icon = local_icons.blue_bus_stop_icon;
+      } else {
+        $scope.markers[args.modelName].icon = local_icons.brown_bus_stop_icon;
       }
-    };
-
-    $scope.icons = local_icons;
+    });
 
     function centerChange() {
       map.updateNearbyBusStops();
@@ -78,8 +84,8 @@
         clickable: true,
         keyboard: true,
         riseOnHover: true,
-        message: stopName,
-        icon: local_icons.bus_stop_icon,
+        // message: stopName,
+        icon: local_icons.brown_bus_stop_icon,
         events: {}
       };
     };
