@@ -78,7 +78,7 @@ module.exports = {
     request(url, function(error, response, body) {
       if (!error && response.statusCode === 200) callback(null, JSON.parse(body));
       else callback(error || response.statusCode);
-    })
+    });
   },
 
   getNextBusesNear: function(lat, lon, radius, callback) {

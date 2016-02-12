@@ -14,6 +14,9 @@ var pathToLibs = path.join(__dirname, 'bower_components');
 var app = express();
 var helpers = require('./helpers');
 
+var mongose = require('mongoose');
+var mongoConnection = mongoose.connect(env.MONGO_SERVER_URI);
+
 app.use(express.static(pathToPublic));
 app.use('/libs', express.static(pathToLibs));
 
@@ -72,6 +75,7 @@ app.get('/nextbus/:lat/:lon/:rad', function(request, response) {
     } else response.json(json);
   });
 });
+
 
 
 var port = env.PORT;
