@@ -17,21 +17,21 @@ var Wmata = require('./models/wmata'); // models for WMATA API data cached in db
 var TWO_HOURS = 60 * 60 * 1000 * 2;
 
 var wmataApi = { // WMATA API calls
-  getPathDetails: function(routeId, callback) {
-    // WMATA bus path details
-    // https://developer.wmata.com/docs/services/54763629281d83086473f231/operations/5476362a281d830c946a3d69
-    var requestUrl = 'https://api.wmata.com/Bus.svc/json/jRouteDetails';
-    var url = requestUrl + helpers.renderParamsForUri({
-      RouteID: routeId,
-      api_key: env.WMATA_KEY
-    });
-    request(url, function(error, response, body) {
-      if (!error && response.statusCode === 200) callback(null, JSON.parse(body));
-      else callback(error || 'ERROR: WMATA says ' + response.statusCode);
-    });
-  },
+  // getBusPathDetails: function(routeId, callback) {
+  //   // WMATA bus path details
+  //   // https://developer.wmata.com/docs/services/54763629281d83086473f231/operations/5476362a281d830c946a3d69
+  //   var requestUrl = 'https://api.wmata.com/Bus.svc/json/jRouteDetails';
+  //   var url = requestUrl + helpers.renderParamsForUri({
+  //     RouteID: routeId,
+  //     api_key: env.WMATA_KEY
+  //   });
+  //   request(url, function(error, response, body) {
+  //     if (!error && response.statusCode === 200) callback(null, JSON.parse(body));
+  //     else callback(error || 'ERROR: WMATA says ' + response.statusCode);
+  //   });
+  // },
 
-  getPathDetails: function(routeId, callback, fallbackPathDetails) {
+  getBusPathDetails: function(routeId, callback, fallbackPathDetails) {
     // WMATA bus path details
     // https://developer.wmata.com/docs/services/54763629281d83086473f231/operations/5476362a281d830c946a3d69
     var requestUrl = 'https://api.wmata.com/Bus.svc/json/jRouteDetails';
@@ -139,12 +139,12 @@ module.exports = {
     });
   },
 
-  getPathDetails: function(routeId, callback) {
+  getBusPathDetails: function(routeId, callback) {
     Wmata.busPathModel.findOne({ RouteID: routeId}, function(error, pathDetails) {
       if (error) callback(error);
       else if (!pathDetails || Date.now() - pathDetails.updated_at > TWO_HOURS) {
         // if path isn't yet in database or needs update
-        wmataApi.getPathDetails(routeId, callback, pathDetails.toObject());
+        wmataApi.getBusPathDetails(routeId, callback, pathDetails);
       } else callback(null, pathDetails); // send back pathDetails from db
     });
   },
@@ -200,7 +200,7 @@ module.exports = {
 
   getPathShapesAsLatLngs: function(routeId, callback) {
 
-    this.getPathDetails(routeId, function(error, pathDetails) {
+    this.getBusPathDetails(routeId, function(error, pathDetails) {
 
       function convertShapeToLatLngs(shape) {
         return shape.map(function(seg) { return { lat: seg.Lat, lng: seg.Lon }; });

@@ -95,6 +95,15 @@ app.get('/stops/:lat/:long/:rad', function(request, response) {
   });
 });
 
+app.get('/path/:id', function(request, response) {
+  wmata.getPathShapesAsLatLngs(request.params.id, function(error, json) {
+    if (error) {
+      response.json({ error: error });
+      console.error('ERROR getting bus route info:', error);
+    } else response.json(json);
+  });
+});
+
 var port = env.PORT;
 app.listen(port, function() {
   console.log('Server up and running on port', port + '.');
