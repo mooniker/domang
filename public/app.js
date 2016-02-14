@@ -64,12 +64,12 @@
       }
     });
 
-    function centerChange() {
+    function recenterMap() {
       map.updateNearbyBusStops();
     }
 
-    $scope.$watch('center.lat', centerChange);
-    $scope.$watch('center.lng', centerChange);
+    $scope.$watch('center.lat', recenterMap);
+    $scope.$watch('center.lng', recenterMap);
 
     angular.extend($scope, {
       markers: {}
@@ -87,6 +87,14 @@
         // message: stopName,
         icon: local_icons.brown_bus_stop_icon,
         events: {}
+      };
+    };
+
+    $scope.addBusPath = function(routeId, latLngs) {
+      $scope.paths[routeId] = {
+        color: '#008000',
+        weight: 8,
+        latlngs: latLngs
       };
     };
 
@@ -136,6 +144,7 @@
         for (var i = 0; i < response.data.length; i++) {
           var data = response.data[i];
           data.display = false;
+          console.log(data);
           $scope.busStopData[response.data[i]['StopID']] = data; // if busStopData were a hash
           // $scope.busStopData.push(data); // if busStopData were an array
         }

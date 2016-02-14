@@ -14,7 +14,7 @@ var pathToLibs = path.join(__dirname, 'bower_components');
 var app = express();
 var helpers = require('./helpers');
 
-var mongose = require('mongoose');
+var mongoose = require('mongoose');
 var mongoConnection = mongoose.connect(env.MONGO_SERVER_URI);
 
 app.use(express.static(pathToPublic));
@@ -35,12 +35,12 @@ app.get('/pentagon', function(request, response) {
 
 app.get('/bang', function(request, response) {
 
-  // wmata.getStopIdsNear(pentagonLat, pentagonLon, 500, function(error, json) {
-  //   if (error) response.json({ error: error });
-  //   else {
-  //     response.json(json);
-  //   }
-  // });
+  wmata.getStopIdsNear(pentagonLat, pentagonLon, 500, function(error, json) {
+    if (error) response.json({ error: error });
+    else {
+      response.json(json);
+    }
+  });
 
   // wmata.getNextBuses('6000877', function(error, json) {
   //   if (error) response.json({ error: error });
@@ -54,14 +54,24 @@ app.get('/bang', function(request, response) {
   //   else response.json(json);
   // });
 
-  wmata.getPathDetails('18P', function(error, json) {
-    if (error) response.json({ error: error });
-    else response.json(json);
-  });
+  // wmata.getPathDetails('18P', function(error, json) {
+  //   if (error) response.json({ error: error });
+  //   else response.json(json);
+  // });
 
   // wmata.getBusPosition('29W', pentagonLat, pentagonLon, 10000, function(error, json) {
   //   if (error) response.json({ error: error });
   //   else response.json(json);
+  // });
+
+  // wmata.getPathShapesAsLatLngs('18P', function(error, json) {
+  //   if (error) response.json({ error: error });
+  //   else response.json(json);
+  // });
+
+  // wmata.getBusRoutes(function(error, routes) {
+  //   if (error) response.json({ error: error });
+  //   else response.json(routes);
   // });
 
 });
