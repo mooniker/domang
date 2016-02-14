@@ -49,7 +49,7 @@
         <button data-ng-click="map.goTo('mcPhersonSq')">McPherson Sq</button>
         <button data-ng-click="map.goTo('pentagon')">Pentagon</button>
         <button data-ng-click="map.goTo('farragutSq')">Farragut Sq</button>
-        <bus-stop data-ng-repeat="stop in busStopData"></bus-stop>
+        <bus-stop data-ng-repeat="stop in markers"></bus-stop>
       </div>
       <div class="col">
         <leaflet lf-center="center" markers="markers" paths="paths" defaults="defaults" class="map"></leaflet>

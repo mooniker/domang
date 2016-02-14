@@ -75,19 +75,10 @@
 
     $scope.$on('leafletDirectiveMarker.click', function(e, args) {
       // Args will contain the marker name and other relevant information
-      // console.log("Leaflet Click", e, args);
-      // make the bus stop display on the dashboard
-      // $scope.busStopData[args.modelName].display = !$scope.busStopData[args.modelName].display;
-      console.log('Toggled bus stop', args.modelName);
-      console.log($scope.markers[args.modelName]);
-      $scope.markers[]
-      // $scope.markers[args.modelName].icon = local_icons.blue_bus_stop_icon;
-      // if ($scope.busStopData[args.modelName].display) {
-      //   // $scope.markers[args.modelName].icon = local_icons.blue_bus_stop_icon;
-      // } else {
-      //   // $scope.markers[args.modelName].icon = local_icons.brown_bus_stop_icon;
-      // }
-
+      console.log('Toggled bus stop', args);
+      $scope.markers[args.modelName].display = !$scope.markers[args.modelName].display;
+      if ($scope.markers[args.modelName].display) $scope.markers[args.modelName].icon = local_icons.blue_bus_stop_icon;
+      else $scope.markers[args.modelName].icon = local_icons.brown_bus_stop_icon;
     });
 
     var map = this;
@@ -125,18 +116,19 @@
       $scope.markers = {};
     };
 
-    $scope.addStopMarker = function(stopId, lat, lng, stopName, routes) {
-      $scope.markers[stopId] = {
-        lat: lat,
-        lng: lng,
-        title: stopName,
+    $scope.addStopMarker = function(stop) {
+      $scope.markers[stop.StopID] = {
+        lat: stop.Lat,
+        lng: stop.Lon,
+        title: stop.Name,
+        routes: stop.Routes,
+        stopId: stop.StopID,
+        display: false,
         draggable: false,
         clickable: true,
         keyboard: true,
         riseOnHover: true,
-        // message: stopName,
         icon: local_icons.brown_bus_stop_icon,
-        routes: routes,
         events: {}
       };
     };
@@ -156,32 +148,6 @@
       }
     });
 
-    // this.markBusStops = function() {
-    //
-    //   for (var busStopId in $scope.busStopData) {
-    //     if (geolib.getDistance({
-    //       latitude: $scope.center.lat,
-    //       longitude: $scope.center.lng
-    //     },{
-    //       latitude: $scope.busStopData[busStopId]['Lat'],
-    //       longitude: $scope.busStopData[busStopId]['Lon']
-    //     }) > 1000 ) {
-    //       if ($scope.markers[busStopId]) {
-    //         delete $scope.markers[busStopId];
-    //       }
-    //       delete $scope.busStopData[busStopId];
-    //     } else {
-    //       $scope.addStopMarker(
-    //         busStopId,
-    //         $scope.busStopData[busStopId]['Lat'],
-    //         $scope.busStopData[busStopId]['Lon'],
-    //         $scope.busStopData[busStopId]['StopName']
-    //       );
-    //     }
-    //   }
-    //
-    // };
-
     this.getNearbyBusStops = function() {
       $http({ // FIXME can we meter this out so the call doesn't go out more than once a second
         method: 'GET',
@@ -190,8 +156,9 @@
         for (var i = 0; i < response.data.length; i++) {
           // console.log('YAY:', response.data[i]);
           var busStopData = response.data[i];
-          busStopData.display = false;
-          $scope.busStops.push(busStopData);
+          // busStopData.display = false;
+          // $scope.busStops.push(busStopData);
+          $scope.addStopMarker(busStopData);
         }
       }, function errorCallback(response) {
         console.log('Error getting nearby bus stops:', response);
