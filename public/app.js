@@ -35,7 +35,8 @@
           logic: 'emit'
         }
       },
-      icons: local_icons
+      icons: local_icons,
+      markers: {}
     });
 
     // $scope.icons.local_icons = {
@@ -60,22 +61,25 @@
       farragutSq: {
         lat: 38.9019,
         lng: -77.0390
+      },
+      unionStation: {
+        lat: 38.8973,
+        lng: -77.0063
       }
     };
 
-    $scope.eventDetected = "No events yet...";
-    var mapEvents = leafletMapEvents.getAvailableMapEvents();
-    for (var k in mapEvents){
-      var eventName = 'leafletDirectiveMap.' + mapEvents[k];
-      $scope.$on(eventName, function(event){
-        $scope.eventDetected = event.name;
-        // console.log(event.name);
-      });
-    }
+    // $scope.eventDetected = "No events yet...";
+    // var mapEvents = leafletMapEvents.getAvailableMapEvents();
+    // for (var k in mapEvents){
+    //   var eventName = 'leafletDirectiveMap.' + mapEvents[k];
+    //   $scope.$on(eventName, function(event){
+    //     $scope.eventDetected = event.name;
+    //     // console.log(event.name);
+    //   });
+    // }
 
     $scope.$on('leafletDirectiveMarker.click', function(e, args) {
       // Args will contain the marker name and other relevant information
-      console.log('Toggled bus stop', args);
       $scope.markers[args.modelName].display = !$scope.markers[args.modelName].display;
       if ($scope.markers[args.modelName].display) $scope.markers[args.modelName].icon = local_icons.blue_bus_stop_icon;
       else $scope.markers[args.modelName].icon = local_icons.brown_bus_stop_icon;
@@ -96,13 +100,13 @@
     };
 
     $scope.$watch('center.lat || center.lng', this.recenterMap);
-    $scope.busStops = [];
-    $scope.busStopData = {};
+    // $scope.busStops = [];
+    // $scope.busStopData = {};
     // $scope.busStopData = [];
 
-    angular.extend($scope, {
-      markers: {}
-    });
+    // angular.extend($scope, {
+    //   markers: {}
+    // });
 
     $scope.addBusPath = function(routeId, latLngs) {
       $scope.paths[routeId] = {
@@ -133,20 +137,20 @@
       };
     };
 
-    $scope.$watchCollection('busStops', function() {
-      // filter local bus stops data by proximity to map center
-      var stops = $scope.busStops.filter(function(stop) {
-        return geolib.getDistance({
-          latitude: $scope.center.lat, longitude: $scope.center.lng
-        },{
-          latitude: stop.Lat, longitude: stop.Lon
-        }) < 1000;
-      });
-      $scope.clearMarkers();
-      for (var i = 0; i < stops.length; i++) {
-        $scope.addStopMarker(stops[i].StopID, stops[i].Lat, stops[i].Lon, stops[i].Name, stops[i].Routes);
-      }
-    });
+    // $scope.$watchCollection('busStops', function() {
+    //   // filter local bus stops data by proximity to map center
+    //   var stops = $scope.busStops.filter(function(stop) {
+    //     return geolib.getDistance({
+    //       latitude: $scope.center.lat, longitude: $scope.center.lng
+    //     },{
+    //       latitude: stop.Lat, longitude: stop.Lon
+    //     }) < 1000;
+    //   });
+    //   $scope.clearMarkers();
+    //   for (var i = 0; i < stops.length; i++) {
+    //     $scope.addStopMarker(stops[i].StopID, stops[i].Lat, stops[i].Lon, stops[i].Name, stops[i].Routes);
+    //   }
+    // });
 
     this.getNearbyBusStops = function() {
       $http({ // FIXME can we meter this out so the call doesn't go out more than once a second
