@@ -86,7 +86,14 @@ app.get('/nextbus/:lat/:lon/:rad', function(request, response) {
   });
 });
 
-
+app.get('/stops/:lat/:long/:rad', function(request, response) {
+  wmata.getBusStopsNear(request.params.lat, request.params.long, request.params.rad, function(error, json) {
+    if (error) {
+      response.json({ error: error });
+      console.error('ERROR getting bus stops:', error);
+    } else response.json(json);
+  });
+});
 
 var port = env.PORT;
 app.listen(port, function() {

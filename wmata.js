@@ -110,7 +110,7 @@ var wmataApi = { // WMATA API calls
 
 module.exports = {
 
-  getStopIdsNear: function(lat, lon, radius, callback) {
+  getBusStopsNear: function(lat, lon, radius, callback) {
     // WMATA JSON stop search
     // https://developer.wmata.com/docs/services/54763629281d83086473f231/operations/5476362a281d830c946a3d6d
     var requestUrl = 'https://api.wmata.com/Bus.svc/json/jStops';
@@ -176,7 +176,7 @@ module.exports = {
   },
 
   getNextBusesNear: function(lat, lon, radius, callback) {
-    this.getStopIdsNear(lat, lon, radius, function(error, stops) {
+    this.getBusStopsNear(lat, lon, radius, function(error, stops) {
       if (error) callback(error);
       else {
         var count = stops.length;
