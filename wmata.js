@@ -181,18 +181,22 @@ module.exports = {
 
     this.getBusPathDetails(routeId, function(error, pathDetails) {
 
-      function convertShapeToLatLngs(shape) {
-        return shape.map(function(seg) { return { lat: seg.Lat, lng: seg.Lon }; });
-      }
+      if (error) callback(error);
+      else {
 
-      if (pathDetails.Direction0) {
-        var dir0path = convertShapeToLatLngs(pathDetails.Direction0.Shape);
-      }
-      if (pathDetails.Direction1) {
-        var dir1path = convertShapeToLatLngs(pathDetails.Direction1.Shape);
-      }
+        function convertShapeToLatLngs(shape) {
+          return shape.map(function(seg) { return { lat: seg.Lat, lng: seg.Lon }; });
+        }
 
-      callback(null, [dir0path, dir1path || null]);
+        if (pathDetails.Direction0) {
+          var dir0path = convertShapeToLatLngs(pathDetails.Direction0.Shape);
+        }
+        if (pathDetails.Direction1) {
+          var dir1path = convertShapeToLatLngs(pathDetails.Direction1.Shape);
+        }
+
+        callback(null, [dir0path, dir1path || null]);
+      }
 
     });
 
