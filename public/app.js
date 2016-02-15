@@ -60,8 +60,24 @@
     };
 
     var map = this;
-    // $scope.selectedBusStops = [];
     $scope.selectedBusStops = {};
+    $scope.routes = [];
+
+    $scope.$watchCollection('selectedBusStops', function(newStops, oldStops, z) {
+      // console.log('newStop:', newStops, 'oldStops:', oldStops, 'z:', z);
+      var routes = [];
+      for (var stop in $scope.selectedBusStops) {
+        routes.push($scope.selectedBusStops[stop].activeRoutes);
+      }
+      var routesFlattened = routes.reduce(function(a, b) {
+        return a.concat(b);
+      }, []);
+      $scope.routes = routesFlattened.filter(function(elem, pos) {
+        return routesFlattened.indexOf(elem === pos);
+      });
+      console.log('routes:', $scope.routes);
+    });
+
     this.updateTimer = undefined; // for metering down updates to no more than once/second
     // this.routes = [];
 
@@ -131,7 +147,7 @@
       }).then(function successfulCallback(response) {
         if (response.data.error) console.log('Error:', response.data.error);
         else {
-          console.log(response.data);
+          // console.log(response.data);
           $scope.selectedBusStops[busStopId] = response.data;
         }
       }, function errorCallback(response) {
