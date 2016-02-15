@@ -25,29 +25,40 @@ app.get('/ping', function(request, response) {
 });
 
 // early dev/testing vars FIXME by deleting when unneeded
-var pentagonLat = 38.8710;
-var pentagonLon = -77.0560;
-var wmata = require('./wmata');
+var places = {
+  pentagon: {
+    lat: 38.8690011,
+    lng: -77.0544217
+  },
+  mcPhersonSq: {
+    lat: 38.9020327,
+    lng: -77.0339576
+  },
+  farragutSq: {
+    lat: 38.9019,
+    lng: -77.0390
+  },
+  unionStation: {
+    lat: 38.8973,
+    lng: -77.0063
+  }
+};
 
-app.get('/pentagon', function(request, response) {
-  response.json({ lat: pentagonLat, lon: pentagonLon });
-});
+var wmata = require('./wmata'); // WMATA db/api functions
 
 app.get('/bang', function(request, response) {
 
-  // wmata.getBusStopsNear(pentagonLat, pentagonLon, 500, function(error, json) {
-  //   if (error) response.json({ error: error });
-  //   else {
-  //     response.json(json);
-  //   }
-  // });
-
-  wmata.getNextBuses('1001185', function(error, json) {
+  wmata.getBusStopsNear(places.mcPhersonSq.lat, places.mcPhersonSq.lng, 500, function(error, json) {
     if (error) response.json({ error: error });
     else {
       response.json(json);
     }
   });
+
+  // wmata.getNextBuses('1001185', function(error, json) {
+  //   if (error) response.json({ error: error });
+  //   else response.json(json);
+  // });
 
   // wmata.getNextBusesNear(pentagonLat, pentagonLon, 500, function(error, json) {
   //   if (error) response.json({ error: error});
