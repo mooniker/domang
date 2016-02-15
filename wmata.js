@@ -17,19 +17,6 @@ var Wmata = require('./models/wmata'); // models for WMATA API data cached in db
 var TWO_HOURS = 60 * 60 * 1000 * 2;
 
 var wmataApi = { // WMATA API calls
-  // getBusPathDetails: function(routeId, callback) {
-  //   // WMATA bus path details
-  //   // https://developer.wmata.com/docs/services/54763629281d83086473f231/operations/5476362a281d830c946a3d69
-  //   var requestUrl = 'https://api.wmata.com/Bus.svc/json/jRouteDetails';
-  //   var url = requestUrl + helpers.renderParamsForUri({
-  //     RouteID: routeId,
-  //     api_key: env.WMATA_KEY
-  //   });
-  //   request(url, function(error, response, body) {
-  //     if (!error && response.statusCode === 200) callback(null, JSON.parse(body));
-  //     else callback(error || 'ERROR: WMATA says ' + response.statusCode);
-  //   });
-  // },
 
   getBusPathDetails: function(routeId, callback, fallbackPathDetails) {
     // WMATA bus path details
@@ -144,7 +131,7 @@ module.exports = {
   getNextBuses: function(stopId, callback) {
     Wmata.busPredictionsModel.findOne({ StopID: stopId }, function(error, predictions) {
       if (error) callback(error);
-      else if (!predictions || Date.now() - predictions.updated_at > 1000 * 10) {
+      else if (!predictions || Date.now() - predictions.updated_at > 10000) { // 10 seconds
         wmataApi.getNextBuses(stopId, callback, predictions);
       } else callback(null, predictions);
     });
