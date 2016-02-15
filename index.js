@@ -35,7 +35,7 @@ app.get('/pentagon', function(request, response) {
 
 app.get('/bang', function(request, response) {
 
-  // wmata.getStopIdsNear(pentagonLat, pentagonLon, 500, function(error, json) {
+  // wmata.getBusStopsNear(pentagonLat, pentagonLon, 500, function(error, json) {
   //   if (error) response.json({ error: error });
   //   else {
   //     response.json(json);
