@@ -120,9 +120,13 @@ module.exports = {
     });
     request(url, function(error, response, body) {
       if (!error && response.statusCode === 200) {
-        var stops = JSON.parse(body)['Stops'].filter(function(stop) {
-          return stop['StopID'] != 0; // aparently some StopIds are 0
+        var stops = JSON.parse(body).Stops.filter(function(stop) {
+          return stop.StopID != 0; // aparently some StopIds are 0
         });
+        // FIXME should we figure out which routes are active
+        // var activeRoutes = [];
+        // ???
+        // var activeRoutesUnique = ???
         callback(null, stops);
       } else callback(error || 'ERROR: WMATA says ' + response.statusCode);
     });
@@ -172,29 +176,6 @@ module.exports = {
       else callback(error || response.statusCode);
     });
   },
-
-  // getNextBusesNear: function(lat, lon, radius, callback) {
-  //   this.getBusStopsNear(lat, lon, radius, function(error, stops) {
-  //     if (error) callback(error);
-  //     else {
-  //       var count = stops.length;
-  //       var predictions = [];
-  //       for (let i = 0; i < stops.length; i++) {
-  //         this.getNextBuses(stops[i]['StopID'], function(error, json) {
-  //           count--;
-  //           if (error) console.error('ERROR in getNextBusesNear:', error);
-  //           if (json) {
-  //             json['StopID'] = stops[i]['StopID'];
-  //             json['Lon'] = stops[i]['Lon'];
-  //             json['Lat'] = stops[i]['Lat'];
-  //             predictions.push(json);
-  //           }
-  //           if (count <= 0) callback(null, predictions);
-  //         });
-  //       }
-  //     }
-  //   }.bind(this));
-  // },
 
   getPathShapesAsLatLngs: function(routeId, callback) {
 
