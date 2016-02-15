@@ -69,6 +69,13 @@ var wmataApi = { // WMATA API calls
         var predictionsJson = JSON.parse(body);
         predictionsJson.updated_at = Date.now();
         predictionsJson.StopID = stopId;
+        // add in buses that are actually coming soon
+        var activeRoutes = predictionsJson.Predictions.sort(function(prediction) {
+          return prediction.Minutes; // sort by time arriving
+        }).map(function(prediction) {
+          return prediction.RouteID;
+        });
+        predictionsJson.activeRoutes = activeRoutes;
         callback(null, predictionsJson);
         Wmata.busPredictionsModel.findOneAndUpdate({ StopID: stopId }, predictionsJson, { upsert: true }, function(err) {
           if (err) console.error(err);

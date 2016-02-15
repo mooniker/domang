@@ -54,7 +54,7 @@ app.get('/bang', function(request, response) {
   //   else response.json(json);
   // });
 
-  // wmata.getPathDetails('18P', function(error, json) {
+  // wmata.getBusPathDetails('7Y', function(error, json) {
   //   if (error) response.json({ error: error });
   //   else response.json(json);
   // });
