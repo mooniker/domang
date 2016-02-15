@@ -6,7 +6,7 @@
       <th>rt</th>
       <th>dir</th>
     </tr>
-    <tr data-ng-repeat="prediction in stop.Predictions">
+    <tr data-ng-repeat="prediction in stop.Predictions | orderBy:'+Minutes'">
       <td>{{prediction.Minutes}}</td>
       <td>{{prediction.RouteID}}</td>
       <td>{{prediction.DirectionText}}</td>
