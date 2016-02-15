@@ -1,5 +1,5 @@
 <div>
-  <h4 title="{{stop.StopID}}">{{stop.StopName}} (X)</h4>
+  <h4 title="{{stop.StopID}}">{{stop.StopName}} <button data-ng-click="deselectBusStop(stop.StopID)">X</button></h4>
   <table data-ng-if="stop.Predictions.length > 0">
     <tr>
       <th>min</th>

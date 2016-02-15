@@ -141,6 +141,7 @@
 
     $scope.deselectBusStop = function(busStopId) {
       delete $scope.selectedBusStops[busStopId];
+      $scope.markers[busStopId].icon = local_icons.brown_bus_stop_icon;
     };
 
     this.test = function() {
@@ -192,6 +193,10 @@
       $scope.markers = {};
     };
 
+    $scope.removeStopMarker = function(stopId) {
+      delete $scope.markers[stopId];
+    };
+
     $scope.addStopMarker = function(stop) {
       $scope.markers[stop.StopID] = {
         lat: stop.Lat,
@@ -207,6 +212,7 @@
         icon: local_icons.brown_bus_stop_icon,
         events: {}
       };
+
       // setTimeout(function() { // FIXME this causes way too many API calls to WMATA and locks up the markers till finished - not good
       //   $http({
       //     method: 'GET',
