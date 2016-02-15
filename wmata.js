@@ -115,7 +115,7 @@ module.exports = {
     var url = requestUrl + helpers.renderParamsForUri({
       Lat: lat,
       Lon: lon,
-      Radius: 500, // meters
+      Radius: radius, // meters
       api_key: env.WMATA_KEY
     });
     request(url, function(error, response, body) {
@@ -173,28 +173,28 @@ module.exports = {
     });
   },
 
-  getNextBusesNear: function(lat, lon, radius, callback) {
-    this.getBusStopsNear(lat, lon, radius, function(error, stops) {
-      if (error) callback(error);
-      else {
-        var count = stops.length;
-        var predictions = [];
-        for (let i = 0; i < stops.length; i++) {
-          this.getNextBuses(stops[i]['StopID'], function(error, json) {
-            count--;
-            if (error) console.error('ERROR in getNextBusesNear:', error);
-            if (json) {
-              json['StopID'] = stops[i]['StopID'];
-              json['Lon'] = stops[i]['Lon'];
-              json['Lat'] = stops[i]['Lat'];
-              predictions.push(json);
-            }
-            if (count <= 0) callback(null, predictions);
-          });
-        }
-      }
-    }.bind(this));
-  },
+  // getNextBusesNear: function(lat, lon, radius, callback) {
+  //   this.getBusStopsNear(lat, lon, radius, function(error, stops) {
+  //     if (error) callback(error);
+  //     else {
+  //       var count = stops.length;
+  //       var predictions = [];
+  //       for (let i = 0; i < stops.length; i++) {
+  //         this.getNextBuses(stops[i]['StopID'], function(error, json) {
+  //           count--;
+  //           if (error) console.error('ERROR in getNextBusesNear:', error);
+  //           if (json) {
+  //             json['StopID'] = stops[i]['StopID'];
+  //             json['Lon'] = stops[i]['Lon'];
+  //             json['Lat'] = stops[i]['Lat'];
+  //             predictions.push(json);
+  //           }
+  //           if (count <= 0) callback(null, predictions);
+  //         });
+  //       }
+  //     }
+  //   }.bind(this));
+  // },
 
   getPathShapesAsLatLngs: function(routeId, callback) {
 
