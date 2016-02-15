@@ -207,12 +207,26 @@
         icon: local_icons.brown_bus_stop_icon,
         events: {}
       };
+      // setTimeout(function() { // FIXME this causes way too many API calls to WMATA and locks up the markers till finished - not good
+      //   $http({
+      //     method: 'GET',
+      //     url: '/stop/' + stop.StopID
+      //   }).then(function successfulCallback(response) {
+      //     if (response.data.error) console.log('Error:', response.data.error);
+      //     else {
+      //       console.log(response.data);
+      //       // $scope.selectedBusStops[busStopId] = response.data;
+      //     }
+      //   }, function errorCallback(response) {
+      //     console.log('Error getting bus predictions:', response);
+      //   });
+      // }, 200);
     };
 
     this.getNearbyBusStops = function() {
       $http({
         method: 'GET',
-        url: '/stops/' + $scope.center.lat + '/' + $scope.center.lng + '/800/'
+        url: '/stops/' + $scope.center.lat + '/' + $scope.center.lng + '/600/'
       }).then(function successfulCallback(response) {
         for (var i = 0; i < response.data.length; i++) {
           // console.log('YAY:', response.data[i]);
