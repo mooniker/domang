@@ -63,6 +63,19 @@
     $scope.selectedBusStops = {};
     $scope.routes = [];
 
+    $scope.filterLatLngsToMap = function(latlngs) {
+      return latlngs.filter(function(latlng) {
+        try {
+        return geolib.getDistance(
+          { latitude: $scope.center.lat, longitude: $scope.center.lng },
+          { latitude: latlng.lat, longitude: latlng.lng }
+        ) < 600;
+      } catch(e) {
+        // console.log(e, 'latlng:', latlng[, 'center:', $scope.center.lat, $scope.center.lng);
+      }
+      });
+    };
+
     $scope.$watchCollection('selectedBusStops', function(newStops, oldStops, z) {
       // console.log('newStop:', newStops, 'oldStops:', oldStops, 'z:', z);
       var routes = [];
@@ -76,6 +89,27 @@
         return routesFlattened.indexOf(elem === pos);
       });
       console.log('routes:', $scope.routes);
+    });
+
+    $scope.$watchCollection('routes', function(currentRoutes, oldRoutes) {
+
+      $http({
+        method: 'GET',
+        url: '/path/' + $scope.routes[0]
+      }).then(function successfulCallback(response) {
+        if (response.data.error) console.log('Error:', response.data.error);
+        else {
+          // console.log(response.data);
+          $scope.paths[$scope.routes[0]] = {
+            message: 'hey there',
+            color: '#008000',
+            weight: 8,
+            latlngs: $scope.filterLatLngsToMap(response.data[0])
+          };
+        }
+      }, function errorCallback(response) {
+        console.log('Error getting bus predictions:', response);
+      });
     });
 
     this.updateTimer = undefined; // for metering down updates to no more than once/second
