@@ -68,6 +68,7 @@ var wmataApi = { // WMATA API calls
       if (!error && response.statusCode === 200) {
         var predictionsJson = JSON.parse(body);
         predictionsJson.updated_at = Date.now();
+        predictionsJson.StopID = stopId;
         callback(null, predictionsJson);
         Wmata.busPredictionsModel.findOneAndUpdate({ StopID: stopId }, predictionsJson, { upsert: true }, function(err) {
           if (err) console.error(err);

@@ -1,5 +1,5 @@
-<div data-ng-show="stop.display">
-  <h4 title="{{stop.stopId}}">{{stop.title}} (X)</h4>
+<div>
+  <h4 title="{{stop.StopID}}">{{stop.StopName}} (X)</h4>
   <table data-ng-if="stop.Predictions.length > 0">
     <tr>
       <th>min</th>
@@ -12,5 +12,5 @@
       <td>{{prediction.DirectionText}}</td>
     </tr>
   </table>
-  <p data-ng-if="stop.Predictions.length == 0">No predictions</p>
+  <p data-ng-if="stop.Predictions.length === 0">No predictions</p>
 </div>

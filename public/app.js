@@ -60,6 +60,8 @@
     };
 
     var map = this;
+    // $scope.selectedBusStops = [];
+    $scope.selectedBusStops = {};
     this.updateTimer = undefined; // for metering down updates to no more than once/second
     // this.routes = [];
 
@@ -96,6 +98,55 @@
     //   this.getPaths();
     // };
 
+    // $scope.selectBusStop = function(busStopId) {
+    //   $http({
+    //     method: 'GET',
+    //     url: '/stop/' + busStopId
+    //   }).then(function successfulCallback(response) {
+    //     if (response.data.error) console.log('ERROR:', response.data.error);
+    //     else {
+    //       var busStopData = response.data;
+    //       // busStopData.stopId = busStopId;
+    //       $scope.selectedBusStops.push(busStopData);
+    //     }
+    //   }, function errorCallback(response) {
+    //     console.log('Error getting bus predictions:', response);
+    //   });
+    // };
+    //
+    // $scope.deselectBusStop = function(busStopId) {
+    //   var target; // FIXME
+    //   if ($scope.selectedBusStops.length === 1) $scope.selectedBusStops = [];
+    //   for (var i = 0; i < $scope.selectedBusStops.length; i++) {
+    //     if ($scope.selectedBusStops[i].StopID === busStopId) target = i;
+    //   }
+    //   if (target && target > -1) $scope.selectedBusStops.splice(target, 1);
+    //   console.log('target:', target);
+    // };
+
+    $scope.selectBusStop = function(busStopId) {
+      $http({
+        method: 'GET',
+        url: '/stop/' + busStopId
+      }).then(function successfulCallback(response) {
+        if (response.data.error) console.log('Error:', response.data.error);
+        else {
+          console.log(response.data);
+          $scope.selectedBusStops[busStopId] = response.data;
+        }
+      }, function errorCallback(response) {
+        console.log('Error getting bus predictions:', response);
+      });
+    };
+
+    $scope.deselectBusStop = function(busStopId) {
+      delete $scope.selectedBusStops[busStopId];
+    };
+
+    this.test = function() {
+      console.log($scope.selectedBusStops);
+    };
+
     this.recenterMap = function() {
       console.log('Map recentered.');
       if (!angular.isDefined(map.updateTimer)) {
@@ -111,8 +162,16 @@
     $scope.$on('leafletDirectiveMarker.click', function(e, args) {
       // Args will contain the marker name and other relevant information
       $scope.markers[args.modelName].display = !$scope.markers[args.modelName].display;
-      if ($scope.markers[args.modelName].display) $scope.markers[args.modelName].icon = local_icons.blue_bus_stop_icon;
-      else $scope.markers[args.modelName].icon = local_icons.brown_bus_stop_icon;
+      if ($scope.markers[args.modelName].display) {
+        $scope.markers[args.modelName].icon = local_icons.blue_bus_stop_icon;
+        // $scope.selectedBusStops.push(args.modelName);
+        $scope.selectBusStop(args.modelName);
+      } else {
+        $scope.markers[args.modelName].icon = local_icons.brown_bus_stop_icon;
+        // var index = $scope.selectedBusStops.indexOf(args.modelName);
+        // if (index > -1) $scope.selectedBusStops.splice(index, 1);
+        $scope.deselectBusStop(args.modelName);
+      }
       // map.getRoutes();
     });
 

@@ -50,7 +50,8 @@
         <button data-ng-click="map.goTo('pentagon')">Pentagon</button>
         <button data-ng-click="map.goTo('farragutSq')">Farragut Sq</button>
         <button data-ng-click="map.goTo('unionStation')">Union Stn</button>
-        <bus-stop data-ng-repeat="stop in markers"></bus-stop>
+        <button data-ng-click="map.test()">test</button>
+        <bus-stop data-ng-repeat="stop in selectedBusStops"></bus-stop>
       </div>
       <div class="col">
         <leaflet lf-center="center" markers="markers" paths="paths" defaults="defaults" class="map"></leaflet>

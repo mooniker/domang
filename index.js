@@ -35,19 +35,19 @@ app.get('/pentagon', function(request, response) {
 
 app.get('/bang', function(request, response) {
 
-  wmata.getStopIdsNear(pentagonLat, pentagonLon, 500, function(error, json) {
-    if (error) response.json({ error: error });
-    else {
-      response.json(json);
-    }
-  });
-
-  // wmata.getNextBuses('6000877', function(error, json) {
+  // wmata.getStopIdsNear(pentagonLat, pentagonLon, 500, function(error, json) {
   //   if (error) response.json({ error: error });
   //   else {
   //     response.json(json);
   //   }
   // });
+
+  wmata.getNextBuses('1001185', function(error, json) {
+    if (error) response.json({ error: error });
+    else {
+      response.json(json);
+    }
+  });
 
   // wmata.getNextBusesNear(pentagonLat, pentagonLon, 500, function(error, json) {
   //   if (error) response.json({ error: error});
@@ -74,6 +74,13 @@ app.get('/bang', function(request, response) {
   //   else response.json(routes);
   // });
 
+});
+
+app.get('/stop/:id', function(request, response) {
+  wmata.getNextBuses(request.params.id, function(error, json) {
+    if (error) response.json({ error: error });
+    else response.json(json);
+  });
 });
 
 app.get('/nextbus/:lat/:lon/:rad', function(request, response) {
