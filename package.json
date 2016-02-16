@@ -1,16 +1,25 @@
 {
   "name": "domang",
   "version": "0.0.0",
-  "description": "",
+  "description": "Real-time transit dashboard for buses in Washington, DC",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "James Moon <mooniker@gmail.com>",
   "license": "ISC",
   "dependencies": {
     "express": "^4.13.4",
     "mongoose": "^4.4.3",
     "request": "^2.69.0"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mooniker/domang.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mooniker/domang/issues"
+  },
+  "homepage": "https://github.com/mooniker/domang#readme"
 }
