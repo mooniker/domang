@@ -76,8 +76,7 @@
       });
     };
 
-    $scope.$watchCollection('selectedBusStops', function(newStops, oldStops, z) {
-      // console.log('newStops:', newStops, 'oldStops:', oldStops);
+    $scope.refreshActiveBusRoutes = function() {
       var keys = Object.keys($scope.selectedBusStops);
       var routes = [];
       $scope.paths = {};
@@ -118,7 +117,10 @@
           }//if
         }//for
       }//for
-      // console.log('routes:', routes);
+    };
+
+    $scope.$watchCollection('selectedBusStops', function(newStops, oldStops, z) {
+      $scope.refreshActiveBusRoutes();
     });
 
     // $scope.$watchCollection('routes', function(currentRoutes, oldRoutes) {
@@ -237,6 +239,7 @@
         map.updateTimer = $timeout(function() {
           console.log('Fetching bus stops');
           map.getNearbyBusStops();
+          $scope.refreshActiveBusRoutes();
           // map.getPaths();
           map.updateTimer = undefined;
         }, 1000);
