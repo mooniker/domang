@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="//code.jquery.com/jquery-2.2.0.min.js"></script>
     <link rel="stylesheet" href="//cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+    <link rel="stylesheet" href="style.css" />
     <!-- <link rel="stylesheet" href="js/leaflet/dist/leaflet.css" /> -->
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
     <!-- <script src="js/angular/angular.min.js"></script> -->
@@ -15,27 +16,6 @@
     <script src="js/ui-leaflet/dist/ui-leaflet.min.js"></script>
     <script src="js/angularjs-geolocation/dist/angularjs-geolocation.min.js"></script>
     <script src="app.js"></script>
-    <style>
-      .map { /* FIXME I don't understand why id map doesn't work */
-        height: 100%;
-        width: 65%;;
-        background: white;
-        position: absolute;
-        right: 0;
-        top: 0;
-      }
-      #dashboard {
-        background: white;
-        width: 34%;
-        /*height: 100%;*/
-        height: 96vh;
-
-        overflow-y: scroll;
-      }
-      body { background: gray; };
-    </style>
-    <style>
-    </style>
   </head>
   <body data-ng-controller="MapController as map">
     <main class="row">

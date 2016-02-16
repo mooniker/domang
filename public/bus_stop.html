@@ -1,5 +1,8 @@
-<div>
+<div class="bus-stop">
   <h4 title="{{stop.StopID}}">{{stop.StopName}} <button data-ng-click="deselectBusStop(stop.StopID)">X</button></h4>
+  <ul class="active-routes">
+    <li data-ng-repeat="route in stop.active_routes"><button>{{route}}</button></li>
+  </ul>
   <table data-ng-if="stop.Predictions.length > 0">
     <tr>
       <th>min</th>
@@ -8,7 +11,7 @@
     </tr>
     <tr data-ng-repeat="prediction in stop.Predictions | orderBy:'+Minutes'">
       <td>{{prediction.Minutes > 0 ? prediction.Minutes : 'arriving'}}</td>
-      <td>{{prediction.RouteID}}</td>
+      <td><button>{{prediction.RouteID}}</button></td>
       <td>{{prediction.DirectionText}}</td>
     </tr>
   </table>
