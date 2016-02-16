@@ -51,10 +51,24 @@
 
     this.centerOnUserLocation();
 
+    this.places = {
+      pentagon: { lat: 38.8690011, lng: -77.0544217 },
+      mcPhersonSq: { lat: 38.9020327, lng: -77.0339576 },
+      farragutSq: { lat: 38.9019, lng: -77.0390 },
+      unionStation: { lat: 38.8973, lng: -77.0063 },
+      dupontCir: { lat: 38.9096, lng: -77.0434 },
+      loganCir: { lat: 38.909643, lng: -77.029595 },
+      shaw: { lat: 38.9111, lng: -77.0219 },
+      columbiaHeights: { lat: 38.9250, lng: -77.0300 },
+      silverSpring: { lat: 38.9937, lng: -77.03198 },
+      takoma: { lat: 38.974837, lng: -77.017509 },
+      cap: { lat: 38.889931, lng: -77.009003 }
+    };
+
     angular.extend($scope, {
       center: { // default to U.S. Capitol
-        lat: lastKnownUserLocation.lat || 38.889931,
-        lng: lastKnownUserLocation.lng || -77.009003,
+        lat: lastKnownUserLocation.lat || this.places.mcPhersonSq.lat,
+        lng: lastKnownUserLocation.lng || this.places.mcPhersonSq.lng,
         zoom: 17
       },
       defaults: {
@@ -70,19 +84,6 @@
       markers: {},
       paths: {}
     });
-
-    this.places = {
-      pentagon: { lat: 38.8690011, lng: -77.0544217 },
-      mcPhersonSq: { lat: 38.9020327, lng: -77.0339576 },
-      farragutSq: { lat: 38.9019, lng: -77.0390 },
-      unionStation: { lat: 38.8973, lng: -77.0063 },
-      dupontCir: { lat: 38.9096, lng: -77.0434 },
-      loganCir: { lat: 38.909643, lng: -77.029595 },
-      shaw: { lat: 38.9111, lng: -77.0219 },
-      columbiaHeights: { lat: 38.9250, lng: -77.0300 },
-      silverSpring: { lat: 38.9937, lng: -77.03198 },
-      takoma: { lat: 38.974837, lng: -77.017509 }
-    };
 
     var map = this;
     $scope.selectedBusStops = {};
