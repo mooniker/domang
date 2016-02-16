@@ -41,6 +41,18 @@
         $scope.center.lng != data.coords.longitude) {
           $scope.center.lat = data.coords.latitude;
           $scope.center.lng = data.coords.longitude;
+          $scope.markers.user = {
+            lat: data.coords.latitude,
+            lng: data.coords.longitude,
+            title: stop.Name,
+            display: true,
+            draggable: false,
+            clickable: true,
+            keyboard: true,
+            riseOnHover: true,
+            // icon: local_icons.brown_bus_stop_icon,
+            // events: {}
+          }
         }
         $scope.lastKnownUserLocation = {
           lat: data.coords.latitude,
