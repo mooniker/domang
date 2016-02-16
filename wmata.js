@@ -65,7 +65,7 @@ var wmataApi = { // WMATA API calls
         var activeRoutesUnique = activeRoutes.filter(function(elem, pos) {
           return activeRoutes.indexOf(elem) === pos;
         });
-        predictionsJson.activeRoutes = activeRoutesUnique;
+        predictionsJson.active_routes = activeRoutesUnique;
         callback(null, predictionsJson);
         Wmata.busPredictionsModel.findOneAndUpdate({ StopID: stopId }, predictionsJson, { upsert: true }, function(err) {
           if (err) console.error(err);

@@ -14,6 +14,7 @@ var WmataBusPathSchema = new Schema({
 var WmataBusPredictionsSchema = new Schema({
   Predictions: Array,
   StopName: String,
+  active_routes: Array,
   updated_at: { type: Date, default: Date.now }
 });
 
