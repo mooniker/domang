@@ -2,9 +2,9 @@
 
 (function() {
 
-  var app = angular.module('domang', ['ui-leaflet']);
+  var app = angular.module('domang', ['ui-leaflet', 'geolocation']);
 
-  app.controller('MapController', ['$scope', '$http', '$timeout', 'leafletMapEvents', function($scope, $http, $timeout, leafletMapEvents) {
+  app.controller('MapController', ['$scope', '$http', '$timeout', 'leafletMapEvents', 'geolocation', function($scope, $http, $timeout, leafletMapEvents, geolocation) {
 
     var local_icons = {
       default_icon: {},
@@ -20,10 +20,31 @@
       }
     };
 
+    var lastKnownUserLocation = { // this doesn't seem to speed things up on startup
+      lat: null,
+      lng: null
+    };
+
+    this.centerOnUserLocation = function() {
+      geolocation.getLocation().then(function(data) {
+        if ($scope.center.lat != data.coords.latitude ||
+        $scope.center.lng != data.coords.longitude) {
+          $scope.center.lat = data.coords.latitude;
+          $scope.center.lng = data.coords.longitude;
+        }
+        $scope.lastKnownUserLocation = {
+          lat: data.coords.latitude,
+          lng: data.coords.longitude
+        };
+      });
+    };
+
+    this.centerOnUserLocation();
+
     angular.extend($scope, {
-      center: {
-        lat: 38.9020327,
-        lng: -77.0339576,
+      center: { // default to U.S. Capitol
+        lat: lastKnownUserLocation.lat || 38.889931,
+        lng: lastKnownUserLocation.lng || -77.009003,
         zoom: 17
       },
       defaults: {
@@ -56,6 +77,10 @@
       unionStation: {
         lat: 38.8973,
         lng: -77.0063
+      },
+      dupontCir: {
+        lat: 38.9096,
+        lng: -77.0434
       }
     };
 
