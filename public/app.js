@@ -156,6 +156,10 @@
       $scope.routes = routes;
     };
 
+    $scope.toggleRouteDisplay = function(routeId) {
+      console.log(routeId);
+    };
+
     $scope.$watchCollection('selectedBusStops', function(newStops, oldStops, z) {
       $scope.refreshActiveBusRoutes();
     });
