@@ -52,3 +52,8 @@ nav ul li {
   list-style-type: none;
   padding-right: 0.4em;
 }
+
+.selected {
+  color: white;
+  background: black;
+}
