@@ -26,22 +26,16 @@ app.get('/ping', function(request, response) {
 
 // early dev/testing vars FIXME by deleting when unneeded
 var places = {
-  pentagon: {
-    lat: 38.8690011,
-    lng: -77.0544217
-  },
-  mcPhersonSq: {
-    lat: 38.9020327,
-    lng: -77.0339576
-  },
-  farragutSq: {
-    lat: 38.9019,
-    lng: -77.0390
-  },
-  unionStation: {
-    lat: 38.8973,
-    lng: -77.0063
-  }
+  pentagon: { lat: 38.8690011, lng: -77.0544217 },
+  mcPhersonSq: { lat: 38.9020327, lng: -77.0339576 },
+  farragutSq: { lat: 38.9019, lng: -77.0390 },
+  unionStation: { lat: 38.8973, lng: -77.0063 },
+  dupontCir: { lat: 38.9096, lng: -77.0434 },
+  loganCir: { lat: 38.909643, lng: -77.029595 },
+  shaw: { lat: 38.9111, lng: -77.0219 },
+  columbiaHeights: { lat: 38.9250, lng: -77.0300 },
+  silverSpring: { lat: 39.0042, lng: -77.0190 },
+  takoma: { lat: 38.974837, lng: -77.017509 }
 };
 
 var wmata = require('./wmata'); // WMATA db/api
