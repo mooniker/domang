@@ -18,7 +18,7 @@ var mongoose = require('mongoose');
 var mongoConnection = mongoose.connect(env.MONGO_SERVER_URI);
 
 app.use(express.static(pathToPublic));
-app.use('/libs', express.static(pathToLibs));
+app.use('/js', express.static(pathToLibs));
 
 app.get('/ping', function(request, response) {
   response.json({ body: 'pong' });
