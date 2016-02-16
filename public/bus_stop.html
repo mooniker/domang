@@ -1,6 +1,7 @@
 <div class="bus-stop">
   <h4 title="{{stop.StopID}}">{{stop.StopName}} <button data-ng-click="deselectBusStop(stop.StopID)">X</button></h4>
   <ul class="active-routes">
+    <li>Active Routes:</li>
     <li data-ng-repeat="route in stop.active_routes"><button>{{route}}</button></li>
   </ul>
   <table data-ng-if="stop.Predictions.length > 0">

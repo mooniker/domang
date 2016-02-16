@@ -21,7 +21,3 @@ body { background: gray; }
   list-style-type: none;
   padding-right: 0.5em;
 }
-
-.active-routes:before {
-  content: 'active routes:';
-}

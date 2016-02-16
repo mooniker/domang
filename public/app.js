@@ -153,6 +153,7 @@
           }//if
         }//for
       }//for
+      $scope.routes = routes;
     };
 
     $scope.$watchCollection('selectedBusStops', function(newStops, oldStops, z) {

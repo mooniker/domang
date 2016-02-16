@@ -27,6 +27,9 @@
           Lng: <input type="number" step="any" data-ng-model="center.lng" />
           Zoom: <input type="number" step="any" data-ng-model="center.zoom" />
         </form>
+        <ul class="active-routes">
+          <li data-ng-repeat="route in routes"><button>{{route}}</button></li>
+        </ul>
         <button data-ng-click="map.goTo('mcPhersonSq')">McPherson Sq</button>
         <button data-ng-click="map.goTo('pentagon')">Pentagon</button>
         <button data-ng-click="map.goTo('farragutSq')">Farragut Sq</button>
