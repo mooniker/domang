@@ -71,7 +71,7 @@
           { latitude: latlng.lat, longitude: latlng.lng }
         ) < 500;
       } catch(e) {
-        // console.log(e, 'latlng:', latlng[, 'center:', $scope.center.lat, $scope.center.lng);
+        console.log(e, 'latlng:', latlng, 'center:', $scope.center.lat, $scope.center.lng);
       }
       });
     };
@@ -81,13 +81,11 @@
       var routes = [];
       $scope.paths = {};
       for (let i = 0; i < keys.length; i++) {
-        // console.log(newStops[keys[i]]);
         let stop = $scope.selectedBusStops[keys[i]];
         for (let j = 0; j < stop.active_routes.length; j++) {
           let routeId = stop.active_routes[j];
           if (routes.indexOf(routeId) === -1) {
             routes.push(routeId);
-            // console.log('Route added:', stop.active_routes[j]);
             $http({
               method: 'GET',
               url: '/path/' + routeId
@@ -123,90 +121,7 @@
       $scope.refreshActiveBusRoutes();
     });
 
-    // $scope.$watchCollection('routes', function(currentRoutes, oldRoutes) {
-    //   $scope.paths = {};
-    //   for (let i = 0; i < currentRoutes.length; i++) {
-    //     $http({
-    //       method: 'GET',
-    //       url: '/path/' + $scope.routes[i]
-    //     }).then(function successfulCallback(response) {
-    //       if (response.data.error) console.log('Error:', response.data.error);
-    //       else {
-    //         $scope.paths[$scope.routes[i]] = {
-    //           message: 'hey there',
-    //           color: '#008000',
-    //           weight: 16,
-    //           opacity: 0.5,
-    //           latlngs: $scope.filterLatLngsToMap(response.data[0])
-    //         };
-    //       }
-    //     }, function errorCallback(response) {
-    //       console.log('Error getting bus predictions:', response);
-    //     });
-    //   }
-    // });
-
     this.updateTimer = undefined; // for metering down updates to no more than once/second
-    // this.routes = [];
-
-    // draw paths is triggered by location change and marker display changes
-    // this.getPaths = function() {
-    //   $scope.paths = {};
-    //   for (var i = 0; i < map.routes.length; i++) {
-    //     var routeId = map.routes[i]
-    //     $http({
-    //       method: 'GET',
-    //       url: '/path/' + map.routes[i]
-    //     }).then(function successfulCallback(response) {
-    //       // console.log(response.data[0]);
-    //       // $scope.paths[map.routes[i]] = response.data[0];
-    //       $scope.addBusPath(routeId, response.data[0]);
-    //       // if (response[1]) $scope.paths[map.routes[i] + '-1'] = response[1];
-    //     }, function errorCallback(response) {
-    //       console.log('Error getting nearby bus stops:', response);
-    //     });
-    //   }
-    // };
-
-    // this.getRoutes = function() {
-    //   console.log('Routes', this.routes)
-    //   this.routes = [];
-    //   for (var marker in $scope.markers) {
-    //     if ($scope.markers[marker].display) {
-    //       for (var i = 0; i < $scope.markers[marker].routes.length; i++) {
-    //         if (this.routes.indexOf($scope.markers[marker].routes[i] === -1))
-    //           this.routes.push($scope.markers[marker].routes[i]);
-    //       }
-    //     }
-    //   }
-    //   this.getPaths();
-    // };
-
-    // $scope.selectBusStop = function(busStopId) {
-    //   $http({
-    //     method: 'GET',
-    //     url: '/stop/' + busStopId
-    //   }).then(function successfulCallback(response) {
-    //     if (response.data.error) console.log('ERROR:', response.data.error);
-    //     else {
-    //       var busStopData = response.data;
-    //       // busStopData.stopId = busStopId;
-    //       $scope.selectedBusStops.push(busStopData);
-    //     }
-    //   }, function errorCallback(response) {
-    //     console.log('Error getting bus predictions:', response);
-    //   });
-    // };
-    //
-    // $scope.deselectBusStop = function(busStopId) {
-    //   var target; // FIXME
-    //   if ($scope.selectedBusStops.length === 1) $scope.selectedBusStops = [];
-    //   for (var i = 0; i < $scope.selectedBusStops.length; i++) {
-    //     if ($scope.selectedBusStops[i].StopID === busStopId) target = i;
-    //   }
-    //   if (target && target > -1) $scope.selectedBusStops.splice(target, 1);
-    //   console.log('target:', target);
-    // };
 
     $scope.selectBusStop = function(busStopId) {
       $http({
@@ -229,9 +144,25 @@
       $scope.markers[busStopId].icon = local_icons.brown_bus_stop_icon;
     };
 
-    // this.test = function() {
-    //   console.log($scope.selectedBusStops);
-    // };
+    // return geolib.getDistance(
+    //   { latitude: $scope.center.lat, longitude: $scope.center.lng },
+    //   { latitude: latlng.lat, longitude: latlng.lng }
+    // ) < 500;
+
+    $scope.updateMarkers = function() {
+      let keys = Object.keys($scope.markers);
+      for (let i = 0; i < keys.length; i++) {
+        let key = keys[i];
+        // check if marker does not belong to selected bus stops
+        // and is outside the map
+        if (!(key in $scope.selectedBusStops) && (geolib.getDistance(
+          { latitude: $scope.center.lat, longitude: $scope.center.lng },
+          { latitude: $scope.markers[key].lat, longitude: $scope.markers[key].lng }
+        ) > 600)) { // if so, delete it
+          delete $scope.markers[key];
+        }
+      }
+    }
 
     this.recenterMap = function() {
       console.log('Map recentered.');
@@ -240,7 +171,7 @@
           console.log('Fetching bus stops');
           map.getNearbyBusStops();
           $scope.refreshActiveBusRoutes();
-          // map.getPaths();
+          $scope.updateMarkers();
           map.updateTimer = undefined;
         }, 1000);
       }
