@@ -44,7 +44,8 @@ var places = {
   }
 };
 
-var wmata = require('./wmata'); // WMATA db/api functions
+var wmata = require('./wmata'); // WMATA db/api
+var cabi = require('./cabi'); // capital bikeshare API
 
 app.get('/bang', function(request, response) {
 
@@ -119,6 +120,13 @@ app.get('/path/:id', function(request, response) {
       response.json({ error: error });
       console.error('ERROR getting bus route info:', error);
     } else response.json(json);
+  });
+});
+
+app.get('/cabi/:lat/:lng', function(request, response) {
+  cabi.getNearbyCabiStations(request.params.lat, request.params.lng, function(error, json) {
+    if (error) response.json({ error: error });
+    else response.json(json);
   });
 });
 

@@ -17,6 +17,16 @@
         iconUrl: '/icons/blue/busstop.png',
         iconSize: [32, 37],
         iconAnchor: [16, 34]
+      },
+      brown_cycling_icon: {
+        iconUrl: '/icons/brown/cycling.png',
+        iconSize: [32, 37],
+        iconAnchor: [16, 34]
+      },
+      blue_cycling_icon: {
+        iconUrl: '/icons/blue/cycling.png',
+        iconSize: [32, 37],
+        iconAnchor: [16, 34]
       }
     };
 
@@ -195,6 +205,7 @@
         map.updateTimer = $timeout(function() {
           console.log('Fetching bus stops');
           map.getNearbyBusStops();
+          map.getNearbyCabiStations();
           $scope.refreshActiveBusRoutes();
           $scope.updateMarkers();
           map.updateTimer = undefined;
@@ -206,14 +217,20 @@
       // Args will contain the marker name and other relevant information
       $scope.markers[args.modelName].display = !$scope.markers[args.modelName].display;
       if ($scope.markers[args.modelName].display) {
-        $scope.markers[args.modelName].icon = local_icons.blue_bus_stop_icon;
-        // $scope.selectedBusStops.push(args.modelName);
-        $scope.selectBusStop(args.modelName);
+        if ($scope.markers[args.modelName].icon == local_icons.brown_bus_stop_icon) {
+          $scope.markers[args.modelName].icon = local_icons.blue_bus_stop_icon;
+          $scope.selectBusStop(args.modelName);
+        } else { // if bicycling
+          $scope.markers[args.modelName].icon = local_icons.blue_cycling_icon;
+        }
       } else {
-        $scope.markers[args.modelName].icon = local_icons.brown_bus_stop_icon;
-        // var index = $scope.selectedBusStops.indexOf(args.modelName);
-        // if (index > -1) $scope.selectedBusStops.splice(index, 1);
-        $scope.deselectBusStop(args.modelName);
+        if ($scope.markers[args.modelName].icon == local_icons.blue_bus_stop_icon) {
+          $scope.markers[args.modelName].icon = local_icons.brown_bus_stop_icon;
+          $scope.deselectBusStop(args.modelName);
+        } else { // if bicycling
+          $scope.markers[args.modelName].icon = local_icons.brown_cycling_icon;
+        }
+
       }
       // map.getRoutes();
     });
@@ -271,6 +288,27 @@
       // }, 200);
     };
 
+    $scope.addCabiMarker = function(data) {
+      $scope.markers[data.id[0]] = {
+        lat: parseFloat(data.lat[0]),
+        lng: parseFloat(data.long[0]),
+        title: data.name[0],
+        nbBikes: data.nbBikes[0],
+        nbEmptyDocks: data.nbEmptyDocks[0],
+        cabiId: data.id[0],
+        installed: data.installed[0],
+        temporary: data.temporary[0],
+        public: data.public[0],
+        display: false,
+        draggable: false,
+        clickable: true,
+        keyboard: true,
+        riseOnHover: true,
+        icon: local_icons.brown_cycling_icon,
+        events: {}
+      }
+    };
+
     this.getNearbyBusStops = function() {
       $http({
         method: 'GET',
@@ -287,6 +325,20 @@
         console.log('Error getting nearby bus stops:', response);
       });
     },
+
+    this.getNearbyCabiStations = function() {
+      $http({
+        method: 'GET',
+        url: '/cabi/' + $scope.center.lat + '/' + $scope.center.lng
+      }).then(function successfulCallback(response) {
+        if (response.data.error) console.log('Error getting cabi stations', response.data.error);
+        else {
+          for (let i = 0; i < response.data.length; i++) {
+            $scope.addCabiMarker(response.data[i]);
+          }
+        }
+      });
+    };
 
     this.goTo = function(place) {
       $scope.center.lat = this.places[place].lat;
