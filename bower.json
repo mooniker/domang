@@ -1,0 +1,27 @@
+{
+  "name": "domang",
+  "description": "Real-time transit dashboard for buses in Washington, DC",
+  "main": "index.js",
+  "authors": [
+    "James Moon <mooniker@gmail.com>"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/mooniker/domang",
+  "moduleType": [
+    "globals"
+  ],
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "Geolib": "geolib#^2.0.18",
+    "angularjs-geolocation": "^0.1.1",
+    "ui-leaflet": "^1.0.0",
+    "angular-simple-logger": "^0.1.7"
+  }
+}
