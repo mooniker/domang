@@ -18,6 +18,23 @@
     <script src="app.js"></script>
   </head>
   <body data-ng-controller="MapController as map">
+    <header>
+      <nav>
+        <ul>
+          <li><button data-ng-click="map.goTo('mcPhersonSq')">McPherson Sq</button></li>
+          <li><button data-ng-click="map.goTo('pentagon')">Pentagon</button></li>
+          <li><button data-ng-click="map.goTo('farragutSq')">Farragut Sq</button></li>
+          <li><button data-ng-click="map.goTo('unionStation')">Union Stn</button></li>
+          <li><button data-ng-click="map.goTo('dupontCir')">Dupont Cir</button></li>
+          <li><button data-ng-click="map.goTo('loganCir')">Logan Cir</button></li>
+          <li><button data-ng-click="map.goTo('shaw')">Shaw</button></li>
+          <li><button data-ng-click="map.goTo('columbiaHeights')">Columbia Heights</button></li>
+          <li><button data-ng-click="map.goTo('silverSpring')">Silver Spring</button></li>
+          <li><button data-ng-click="map.goTo('takoma')">Takoma</button></li>
+          <li><button data-ng-click="map.centerOnUserLocation()">Current Location</button></li>
+        </ul>
+      </nav>
+    </header>
     <main class="row">
       <div id="dashboard" class="col">
         <h2 data-ng-bind="eventDetected"></h2>
@@ -27,26 +44,20 @@
           Lng: <input type="number" step="any" data-ng-model="center.lng" />
           Zoom: <input type="number" step="any" data-ng-model="center.zoom" />
         </form>
-        <ul class="active-routes">
-          <li data-ng-repeat="route in routes"><button>{{route}}</button></li>
-        </ul>
-        <button data-ng-click="map.goTo('mcPhersonSq')">McPherson Sq</button>
-        <button data-ng-click="map.goTo('pentagon')">Pentagon</button>
-        <button data-ng-click="map.goTo('farragutSq')">Farragut Sq</button>
-        <button data-ng-click="map.goTo('unionStation')">Union Stn</button>
-        <button data-ng-click="map.goTo('dupontCir')">Dupont Cir</button>
-        <button data-ng-click="map.goTo('loganCir')">Logan Cir</button>
-        <button data-ng-click="map.goTo('shaw')">Shaw</button>
-        <button data-ng-click="map.goTo('columbiaHeights')">Columbia Heights</button>
-        <button data-ng-click="map.goTo('silverSpring')">Silver Spring</button>
-        <button data-ng-click="map.goTo('takoma')">Takoma</button>
-        <button data-ng-click="map.centerOnUserLocation()">Current Location</button>
         <bus-stop data-ng-repeat="stop in selectedBusStops"></bus-stop>
       </div>
       <div class="col">
         <leaflet lf-center="center" markers="markers" paths="paths" defaults="defaults" class="map"></leaflet>
       </div>
     </main>
+
+    <!-- <footer>
+      <nav>
+        <ul class="active-routes">
+          <li data-ng-repeat="route in routes"><button>{{route}}</button></li>
+        </ul>
+      </nav>
+    </footer> -->
     <!-- <script src="script.js"></script> -->
   </body>
 </html>
