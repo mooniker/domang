@@ -57,3 +57,8 @@ nav ul li {
   color: white;
   background: black;
 }
+
+.bus-stop-header h4 {
+  margin-top: 0.4em;
+  margin-bottom: 0.4em;
+}

@@ -46,13 +46,12 @@
 
     <main class="row">
       <div id="dashboard" class="col">
-        <h2 data-ng-bind="eventDetected"></h2>
-        <!-- <p data-ng-bind="map.eventDetected"></p> -->
+        <!-- <h2 data-ng-bind="eventDetected"></h2>
         <form>
           Lat: <input type="number" step="any" data-ng-model="center.lat" />
           Lng: <input type="number" step="any" data-ng-model="center.lng" />
           Zoom: <input type="number" step="any" data-ng-model="center.zoom" />
-        </form>
+        </form> -->
         <bus-stop data-ng-repeat="stop in selectedBusStops"></bus-stop>
       </div>
       <div class="col">
