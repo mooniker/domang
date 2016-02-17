@@ -129,52 +129,6 @@
       });
     };
 
-    // $scope.refreshActiveBusRoutes = function() {
-    //   var keys = Object.keys($scope.selectedBusStops);
-    //   var routes = [];
-    //   $scope.paths = {};
-    //   for (let i = 0; i < keys.length; i++) {
-    //     let stop = $scope.selectedBusStops[keys[i]];
-    //     for (let j = 0; j < stop.active_routes.length; j++) {
-    //       let routeId = stop.active_routes[j];
-    //       if (routes.indexOf(routeId) === -1) {
-    //         routes.push(routeId);
-    //         $http({
-    //           method: 'GET',
-    //           url: '/path/' + routeId
-    //         }).then(function successfulCallback(response) {
-    //           if (response.data.error) console.log('Error:', response.data.error);
-    //           else {
-    //             $scope.paths[routeId + 'a'] = {
-    //               message: routeId,
-    //               color: 'cyan',
-    //               weight: 18,
-    //               opacity: 0.3,
-    //               latlngs: $scope.filterLatLngsToMap(response.data[0])
-    //             };
-    //             if (response.data[1]) {
-    //               $scope.paths[routeId + 'b'] = {
-    //                 message: routeId,
-    //                 color: 'cyan',
-    //                 weight: 18,
-    //                 opacity: 0.3,
-    //                 latlngs: $scope.filterLatLngsToMap(response.data[1])
-    //               };
-    //             }
-    //           }
-    //         }, function errorCallback(response) {
-    //           console.log('Error getting bus predictions:', response);
-    //         });
-    //       }//if
-    //     }//for
-    //   }//for
-    //   $scope.routes = routes;
-    // };
-    //
-    // $scope.$watchCollection('selectedBusStops', function(newStops, oldStops, z) {
-    //   $scope.refreshActiveBusRoutes();
-    // });
-
     this.drawBusPath = function(routeId) {
       $http({
         method: 'GET',
@@ -223,10 +177,6 @@
       }
     };
 
-    // $scope.$watchCollection('routes', function() {
-    //   map.drawBusPaths();
-    // });
-
     this.updateTimer = undefined; // for metering down updates to no more than once/second
 
     $scope.selectBusStop = function(busStopId) {
@@ -250,11 +200,6 @@
       $scope.markers[busStopId].icon = local_icons.brown_bus_stop_icon;
     };
 
-    // return geolib.getDistance(
-    //   { latitude: $scope.center.lat, longitude: $scope.center.lng },
-    //   { latitude: latlng.lat, longitude: latlng.lng }
-    // ) < 500;
-
     $scope.updateMarkers = function() {
       let keys = Object.keys($scope.markers);
       for (let i = 0; i < keys.length; i++) {
@@ -277,7 +222,6 @@
           console.log('Fetching bus stops');
           map.getNearbyBusStops();
           map.getNearbyCabiStations();
-          // $scope.refreshActiveBusRoutes();
           map.redrawBusPaths();
           $scope.updateMarkers();
           map.updateTimer = undefined;
@@ -329,20 +273,24 @@
     };
 
     $scope.addStopMarker = function(stop) {
-      $scope.markers[stop.StopID] = {
-        lat: stop.Lat,
-        lng: stop.Lon,
-        title: stop.Name,
-        routes: stop.Routes,
-        stopId: stop.StopID,
-        display: false,
-        draggable: false,
-        clickable: true,
-        keyboard: true,
-        riseOnHover: true,
-        icon: local_icons.brown_bus_stop_icon,
-        events: {}
-      };
+      if ($scope.markers[stop.StopID]) {
+        // already got his bus stop on screen
+      } else {
+        $scope.markers[stop.StopID] = {
+          lat: stop.Lat,
+          lng: stop.Lon,
+          title: stop.Name,
+          routes: stop.Routes,
+          stopId: stop.StopID,
+          display: false,
+          draggable: false,
+          clickable: true,
+          keyboard: true,
+          riseOnHover: true,
+          icon: local_icons.brown_bus_stop_icon,
+          events: {}
+        };
+      }
 
       // setTimeout(function() { // FIXME this causes way too many API calls to WMATA and locks up the markers till finished - not good
       //   $http({
