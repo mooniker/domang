@@ -21,26 +21,11 @@
 
     <header>
       <nav>
-        <ul>
-          <li><button data-ng-click="map.goTo('mcPhersonSq')">McPher.Sq.</button></li>
-          <li><button data-ng-click="map.goTo('pentagon')">Pentagon</button></li>
-          <li><button data-ng-click="map.goTo('farragutSq')">FarragutSq.</button></li>
-          <li><button data-ng-click="map.goTo('unionStation')">UnionStn.</button></li>
-          <li><button data-ng-click="map.goTo('dupontCir')">DupontCir.</button></li>
-          <li><button data-ng-click="map.goTo('loganCir')">LoganCir.</button></li>
-          <li><button data-ng-click="map.goTo('shaw')">Shaw</button></li>
-          <li><button data-ng-click="map.goTo('columbiaHeights')">Col.Hts.</button></li>
-          <li><button data-ng-click="map.goTo('silverSpring')">SilverSpring</button></li>
-          <li><button data-ng-click="map.goTo('takoma')">Takoma</button></li>
-          <li><button data-ng-click="map.centerOnUserLocation()">CurrentLocation</button></li>
-          <li>
-            <!-- <form> -->
-              <select data-ng-model="routes">
-                <option data-ng-repeat="route in routes" value="{{route}}">{{route}}</option>
-              </select>
-            <!-- </form> -->
-          </li>
-        </ul>
+        <form>
+          <select name="neighborhood" data-ng-options="place.name for place in map.places" data-ng-model="map.neighborhoodSelector" data-ng-change="map.selectNeighborhood()">
+            <option selected disabled>where</option>
+          </select>
+        </form>
       </nav>
     </header>
 

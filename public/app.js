@@ -63,24 +63,34 @@
 
     this.centerOnUserLocation();
 
-    this.places = {
-      pentagon: { lat: 38.8690011, lng: -77.0544217 },
-      mcPhersonSq: { lat: 38.9020327, lng: -77.0339576 },
-      farragutSq: { lat: 38.9019, lng: -77.0390 },
-      unionStation: { lat: 38.8973, lng: -77.0063 },
-      dupontCir: { lat: 38.9096, lng: -77.0434 },
-      loganCir: { lat: 38.909643, lng: -77.029595 },
-      shaw: { lat: 38.9111, lng: -77.0219 },
-      columbiaHeights: { lat: 38.9250, lng: -77.0300 },
-      silverSpring: { lat: 38.9937, lng: -77.03198 },
-      takoma: { lat: 38.974837, lng: -77.017509 },
-      cap: { lat: 38.889931, lng: -77.009003 }
-    };
+    this.places = [{
+      name: 'Columbia Heights', lat: 38.9250, lng: -77.0300
+    },{
+      name: 'Dupont Circle', lat: 38.9096, lng: -77.0434
+    },{
+      name: 'Farragut Square', lat: 38.9019, lng: -77.0390
+    },{
+      name: 'Logan Circle', lat: 38.909643, lng: -77.029595
+    },{
+      name: 'McPherson Square', lat: 38.9020327, lng: -77.0339576
+    },{
+      name: 'Pentagon', lat: 38.8690011, lng: -77.0544217
+    },{
+      name: 'Shaw', lat: 38.9111, lng: -77.0219
+    },{
+      name: 'Silver Spring', lat: 38.9937, lng: -77.03198
+    },{
+      name: 'Takoma', lat: 38.974837, lng: -77.017509
+    },{
+      name: 'Union Station', lat: 38.8973, lng: -77.0063
+    },{
+      name: 'U.S. Capitol', lat: 38.889931, lng: -77.009003
+    }];
 
     angular.extend($scope, {
       center: { // default to U.S. Capitol
-        lat: lastKnownUserLocation.lat || this.places.mcPhersonSq.lat,
-        lng: lastKnownUserLocation.lng || this.places.mcPhersonSq.lng,
+        lat: lastKnownUserLocation.lat || this.places[1].lat,
+        lng: lastKnownUserLocation.lng || this.places[1].lng,
         zoom: 17
       },
       defaults: {
@@ -98,6 +108,11 @@
     });
 
     var map = this;
+    map.neighborhoodSelector; // used for pulldown menu
+    map.selectNeighborhood = function() {
+      console.log(map.neighborhoodSelector);
+      map.goToLocation(map.neighborhoodSelector.lat, map.neighborhoodSelector.lng);
+    };
     $scope.selectedBusStops = {};
     $scope.routes = [];
 
@@ -397,14 +412,15 @@
       });
     };
 
-    this.goTo = function(place) {
-      $scope.center.lat = this.places[place].lat;
-      $scope.center.lng = this.places[place].lng;
-    };
+    // this.goTo = function(place) {
+    //   $scope.center.lat = this.places[place].lat;
+    //   $scope.center.lng = this.places[place].lng;
+    // };
 
     this.goToLocation = function(lat, lng) {
       $scope.center.lat = lat;
       $scope.center.lng = lng;
+      console.log('go to', lat, lng);
     };
 
   }]);
