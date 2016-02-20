@@ -103,6 +103,24 @@ var wmataApi = { // WMATA API calls
   getAllBusStops: function(callback) {
     // could get all the routes and store them in db
     // not sure why that might be useful, maybe not
+  },
+
+  getRailStationEntrances: function(callback, fallbackEntrances) {
+    // WMATA rail station entrances
+    // https://developer.wmata.com/docs/services/5476364f031f590f38092507/operations/5476364f031f5909e4fe330f
+    var url = 'https://api.wmata.com/Rail.svc/json/jStationEntrances' +
+      helpers.renderParamsForUri({ api_key: env.WMATA_KEY });
+    request(url, function(error, response, body) {
+      if (!error && response.statusCode === 200) {
+        callback(null, body); // we can't send just body because it expects just body to be filtered by laglng/rad
+        // TODO here's where we would cache the data in db for future use
+        // Wmata.railStationEntranceModel.findOneAndUpdate({} ...)
+      } else if (fallbackEntrances) {
+        callback(null, fallbackEntrances);
+        console.error(error || 'ERROR: WMATA says ' + response.statusCode + '.');
+      } else callback(error || 'ERROR: WMATA says ' + response.statusCode + '.');
+    });
+
   }
 };
 
@@ -200,6 +218,12 @@ module.exports = {
 
     });
 
+  },
+
+  getRailStationEntrances: function(lat, lon, radius, callback) {
+    // TODO check db for recent entrance data
+    // if recent data exists, find stations by latlng/radius and return that
+    // else call api for recent data and then search
   }
 
 };

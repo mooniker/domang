@@ -25,10 +25,19 @@ var WmataBusRouteSchema = new Schema({
   updated_at: { type: Date, default: Date.now }
 });
 
+var WmataRailStationEntranceSchema = new Schema({
+  Description: String,
+  latlng: { type: [Number], index: '2d' },
+  Name: String,
+  StationCode1: String,
+  StationCode2: String
+});
+
 module.exports = {
   busPathModel: mongoose.model('WmataBusPath', WmataBusPathSchema),
   busPredictionsModel: mongoose.model('WmataBusPredictions', WmataBusPredictionsSchema),
-  busRouteModel: mongoose.model('WmataBusRoute', WmataBusRouteSchema)
+  busRouteModel: mongoose.model('WmataBusRoute', WmataBusRouteSchema),
+  railStationEntranceModel: mongoose.model('WmataRailStationEntrance', WmataRailStationEntranceSchema)
   // lineModel: mongoose.model('WmataLine'),
   // stationModel: mongoose.model('WmataStation'),
   // elevatorIncidentModel: mongoose.model('WmataElevatorIncident'),
