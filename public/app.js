@@ -2,6 +2,8 @@
 
 (function() {
 
+  var RAD = 400; // meters, default radius for geolocation searches
+
   var app = angular.module('domang', ['ui-leaflet', 'geolocation']);
 
   app.controller('MapController', ['$scope', '$http', '$timeout', 'leafletMapEvents', 'geolocation', function($scope, $http, $timeout, leafletMapEvents, geolocation) {
@@ -83,9 +85,15 @@
     },{
       name: 'Farragut Square', lat: 38.9019, lng: -77.0390
     },{
+      name: 'Gallery Place', lat: 38.8981674, lng: -77.021920
+    },{
+      name: "L'Enfant Plaza", lat: 38.8840, lng: -77.0209
+    },{
       name: 'Logan Circle', lat: 38.909643, lng: -77.029595
     },{
       name: 'McPherson Square', lat: 38.9020327, lng: -77.0339576
+    },{
+      name: 'Metro Center', lat: 38.8983144732, lng: -77.0280779971
     },{
       name: 'Pentagon', lat: 38.8690011, lng: -77.0544217
     },{
@@ -344,7 +352,7 @@
         clickable: true,
         keyboard: true,
         riseOnHover: true,
-        icon: local_icons.blue_metro_icon,
+        icon: local_icons.brown_metro_icon,
         events: {}
       };
     };
@@ -373,7 +381,7 @@
     this.getNearbyBusStops = function() {
       $http({
         method: 'GET',
-        url: '/stops/' + $scope.center.lat + '/' + $scope.center.lng + '/600/'
+        url: '/stops/' + $scope.center.lat + '/' + $scope.center.lng + '/' + RAD + '/'
       }).then(function successfulCallback(response) {
         for (var i = 0; i < response.data.length; i++) {
           // console.log('YAY:', response.data[i]);
@@ -391,7 +399,7 @@
       console.log('Getting rail stations');
       $http({
         method: 'GET',
-        url: '/entrances/' + $scope.center.lat + '/' + $scope.center.lng + '/500'
+        url: '/entrances/' + $scope.center.lat + '/' + $scope.center.lng + '/' + RAD
       }).then(function successfulCallback(response) {
         for (let i = 0; i < response.data.length; i++) {
           var entrance = response.data[i];
