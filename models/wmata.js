@@ -30,7 +30,9 @@ var WmataRailStationEntranceSchema = new Schema({
   latlng: { type: [Number], index: '2d' },
   Name: String,
   StationCode1: String,
-  StationCode2: String
+  StationCode2: String,
+  StationName1: String,
+  StationName2: String
 });
 
 var WmataRailStationSchema = new Schema({
@@ -62,8 +64,9 @@ module.exports = {
   busRouteModel: mongoose.model('WmataBusRoute', WmataBusRouteSchema),
   railStationEntranceModel: mongoose.model('WmataRailStationEntrance', WmataRailStationEntranceSchema),
   railStationModel: mongoose.model('WmataRailStation', WmataRailStationSchema),
-  railPredictionsModel: mongoose.model('WmataRailPredictions', WmataRailPredictionsSchema)
+  railPredictionsModel: mongoose.model('WmataRailPredictions', WmataRailPredictionsSchema),
   // railLineModel: mongoose.model('WmataRailLine'),
   // elevatorIncidentModel: mongoose.model('WmataElevatorIncident'),
   // railIncidentModel: mongoose.model('WmataRailIncident')
+  stationCodes: require('./station_codes')
 };

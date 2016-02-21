@@ -50,8 +50,12 @@ module.exports = { // WMATA API calls
       });
     request(url, function(error, response, body) {
       if (!error && response.statusCode === 200) {
-        var stops = JSON.parse(body).Entrances;
-        callback(null, stops);
+        var entrances = JSON.parse(body).Entrances;
+        for (let i = 0; i < entrances.length; i++) {
+          if (entrances[i].StationCode1) entrances[i].StationName1 = Wmata.stationCodes[entrances[i].StationCode1];
+          if (entrances[i].StationCode2) entrances[i].StationName2 = Wmata.stationCodes[entrances[i].StationCode2];
+        }
+        callback(null, entrances);
       } else callback(error || 'ERROR: WMATA says ' + response.statusCode);
     });
   },
@@ -68,7 +72,7 @@ module.exports = { // WMATA API calls
         Wmata.railStationEntranceModel.findOneAndUpdate({}, entrances, { upsert: true }, function(err) {
           if (err) console.error(err);
           else console.log('Updated rail entrances in db.');
-        })
+        });
       } else callback(error || 'ERROR: WMATA says ' + response.statusCode);
     })
   },
@@ -253,7 +257,7 @@ module.exports = { // WMATA API calls
         Wmata.railPredictionsModel.findOneAndUpdate({}, predictions, { upsert: true }, function(err) {
           if (err) console.error(err);
           else console.log('Predictions updated in db.');
-        })
+        });
       } else if (fallbackPredictions) {
         callback(null, fallbackPredictions);
         console.error('Failed to update rail predictions, falling back to old data');
