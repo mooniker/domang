@@ -33,13 +33,31 @@ var WmataRailStationEntranceSchema = new Schema({
   StationCode2: String
 });
 
+var WmataRailStationSchema = new Schema({
+  Address: {
+    City: String,
+    State: String,
+    Street: String,
+    Zip: String
+  },
+  Code: String,
+  latlng: { type: [Number], index: '2d' },
+  LineCode1: String,
+  LineCode2: String,
+  LineCode3: String,
+  LineCode4: String,
+  Name: String,
+  StationTogether1: String,
+  StationTogether2: String
+});
+
 module.exports = {
   busPathModel: mongoose.model('WmataBusPath', WmataBusPathSchema),
   busPredictionsModel: mongoose.model('WmataBusPredictions', WmataBusPredictionsSchema),
   busRouteModel: mongoose.model('WmataBusRoute', WmataBusRouteSchema),
-  railStationEntranceModel: mongoose.model('WmataRailStationEntrance', WmataRailStationEntranceSchema)
-  // lineModel: mongoose.model('WmataLine'),
-  // stationModel: mongoose.model('WmataStation'),
+  railStationEntranceModel: mongoose.model('WmataRailStationEntrance', WmataRailStationEntranceSchema),
+  railStationModel: mongoose.model('WmataRailStation', WmataRailStationSchema)
+  // railLineModel: mongoose.model('WmataRailLine'),
   // elevatorIncidentModel: mongoose.model('WmataElevatorIncident'),
   // railIncidentModel: mongoose.model('WmataRailIncident')
 };
