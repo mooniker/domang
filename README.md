@@ -7,3 +7,7 @@ Domang is a work very much in progress.
 ## Demo your Getaway
 
 See the demo at [http://getaway.mooniker.com](http://getaway.mooniker.com).
+
+## Credit where credit is due
+
+Map marker icons used on this app's map are supplied by [Map Icons Collection](https://mapicons.mapsmarker.com/) under [the Creative Commons Attribution-ShareAlike 3.0 Unported (CC BY-SA 3.0) license](http://creativecommons.org/licenses/by-sa/3.0/).
