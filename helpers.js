@@ -9,6 +9,10 @@ module.exports = {
       uriParamString += key + '=' + encodeURIComponent(searchParamsAsJson[key]);
     }
     return uriParamString;
+  },
+
+  isNotToday: function(unixtime) {
+    return new Date().toDateString() != new Date(unixtime).toDateString();
   }
 
 };
