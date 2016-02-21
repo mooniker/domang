@@ -22,7 +22,7 @@ module.exports = {
   getNextBuses: function(stopId, callback) {
     Wmata.busPredictionsModel.findOne({ StopID: stopId }, function(error, predictions) {
       if (error) callback(error);
-      else if (!predictions || Date.now() - predictions.updated_at > DATA_AGE_LIMIT) {
+      else if (!predictions || Date.now() - predictions.timestamp > DATA_AGE_LIMIT) {
         wmataApi.getNextBuses(stopId, callback, predictions);
       } else callback(null, predictions);
     });
@@ -31,7 +31,7 @@ module.exports = {
   getBusPathDetails: function(routeId, callback) {
     Wmata.busPathModel.findOne({ RouteID: routeId}, function(error, pathDetails) {
       if (error) callback(error);
-      else if (!pathDetails || helpers.isNotToday(pathDetails.updated_at)) {
+      else if (!pathDetails || helpers.isNotToday(pathDetails.timestamp)) {
         // if path isn't yet in database or needs update
         wmataApi.getBusPathDetails(routeId, callback, pathDetails);
       } else callback(null, pathDetails); // send back pathDetails from db
@@ -41,7 +41,7 @@ module.exports = {
   getBusRoutes: function(callback) {
     Wmata.busRouteModel.findOne({}, function(error, routesData) {
       if (error) callback(error);
-      else if (!routesData || helpers.isNotToday(routesData.updated_at)) {
+      else if (!routesData || helpers.isNotToday(routesData.timestamp)) {
         wmataApi.getBusRoutes(callback, routesData);
       } else callback(null, routesData);
     });
@@ -50,7 +50,7 @@ module.exports = {
   getRailStationList: function(callback) {
     Wmata.railStationModel.findOne({}, function(error, stationsData) {
       if (error) callback(error);
-      else if (!stationsData || helpers.isNotToday(stationsData.updated_at)) {
+      else if (!stationsData || helpers.isNotToday(stationsData.timestamp)) {
         wmataApi.getRailStationList(callback, stationsData);
       } else callback(null, stationsData);
     });

@@ -8,21 +8,21 @@ var WmataBusPathSchema = new Schema({
   Name: String,
   Direction0: Schema.Types.Mixed,
   Direction1: Schema.Types.Mixed,
-  updated_at: { type: Date, default: Date.now }
+  timestamp: { type: Date, default: Date.now }
 });
 
 var WmataBusPredictionsSchema = new Schema({
   Predictions: Array,
   StopName: String,
   active_routes: Array,
-  updated_at: { type: Date, default: Date.now }
+  timestamp: { type: Date, default: Date.now }
 });
 
 var WmataBusRouteSchema = new Schema({
   RouteID: String,
   Name: String,
   LineDescription: String,
-  updated_at: { type: Date, default: Date.now }
+  timestamp: { type: Date, default: Date.now }
 });
 
 var WmataRailStationEntranceSchema = new Schema({

@@ -85,7 +85,7 @@ module.exports = { // WMATA API calls
     request(url, function(error, response, body) {
       if (!error && response.statusCode === 200) {
         var routesJson = JSON.parse(body);
-        routesJson.updated_at = Date.now();
+        routesJson.timestamp = Date.now();
         callback(null, routesJson);
         Wmata.busRouteModel.findOneAndUpdate({}, routesJson, { upsert: true }, function(err) {
           if (err) console.error(err);
@@ -109,7 +109,7 @@ module.exports = { // WMATA API calls
     request(url, function(error, response, body) {
       if (!error && response.statusCode === 200) {
         var routeJson = JSON.parse(body);
-        routeJson.updated_at = Date.now();
+        routeJson.timestamp = Date.now();
         callback(null, routeJson);
         // after passing on new data, save the data in the db for the future
         Wmata.busPathModel.findOneAndUpdate({ RouteID: routeId }, routeJson, { upsert: true }, function(err, doc) {
@@ -134,7 +134,7 @@ module.exports = { // WMATA API calls
     request(url, function(error, response, body) {
       if (!error && response.statusCode === 200) {
         var predictionsJson = JSON.parse(body);
-        predictionsJson.updated_at = Date.now();
+        predictionsJson.timestamp = Date.now();
         predictionsJson.StopID = stopId;
         // add in buses that are actually coming soon, could be moved to client-side?
         var activeRoutes = predictionsJson.Predictions.sort(function(prediction) {
@@ -167,7 +167,7 @@ module.exports = { // WMATA API calls
       if (!error && response.statusCode === 200) {
         var routesJson = JSON.parse(body);
         var updatedAt = Date.now();
-        routesJson.updated_at = updatedAt;
+        routesJson.timestamp = updatedAt;
         callback(null, routesJson);
         Wmata.busRouteModel.findOneAndUpdate({}, routesJson, { upsert: true }, function(err) {
           if (err) console.error(err);
@@ -211,7 +211,7 @@ module.exports = { // WMATA API calls
     request(url, function(error, response, body) {
       if (!error && response.statusCode === 200) {
         var stations = JSON.parse(body);
-        stations.updated_at = Date.now();
+        stations.timestamp = Date.now();
         callback(error, stations);
         Wmata.railStationModel.findOneAndUpdate({}, stations, { upsert: true }, function(err) {
           if (err) console.error(err);
