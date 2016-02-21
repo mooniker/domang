@@ -38,12 +38,13 @@ var places = {
   takoma: { lat: 38.974837, lng: -77.017509 }
 };
 
-var wmata = require('./wmata'); // WMATA db/api
+var wmata = require('./wmata'); // WMATA db
+var wmataApi = require('./wmata_api');
 var cabi = require('./cabi'); // capital bikeshare API
 
 app.get('/bang', function(request, response) {
 
-  wmata.getBusStopsNear(places.mcPhersonSq.lat, places.mcPhersonSq.lng, 500, function(error, json) {
+  wmataApi.getBusStopsNear(places.mcPhersonSq.lat, places.mcPhersonSq.lng, 500, function(error, json) {
     if (error) response.json({ error: error });
     else {
       response.json(json);
@@ -80,6 +81,11 @@ app.get('/bang', function(request, response) {
   //   else response.json(routes);
   // });
 
+  wmata.getRailStationEntrancesNear(places.mcPhersonSq.lat, places.mcPhersonSq.lng, 500, function(error, json) {
+    if (error) response.json({ error: error });
+    else response.json(json);
+  });
+
 });
 
 app.get('/stop/:id', function(request, response) {
@@ -100,7 +106,7 @@ app.get('/nextbus/:lat/:lon/:rad', function(request, response) {
 });
 
 app.get('/stops/:lat/:long/:rad', function(request, response) {
-  wmata.getBusStopsNear(request.params.lat, request.params.long, request.params.rad, function(error, json) {
+  wmataApi.getBusStopsNear(request.params.lat, request.params.long, request.params.rad, function(error, json) {
     if (error) {
       response.json({ error: error });
       console.error('ERROR getting bus stops:', error);
