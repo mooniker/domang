@@ -78,6 +78,15 @@ module.exports = {
 
     });
 
+  },
+
+  getRailPredictions: function(callback) {
+    Wmata.railPredictionsModel.findOne({}, function(error, predictions) {
+      if (error) callback(error);
+      else if (!predictions || Date.now() - predictions.timestamp > 1000 * 15) {
+        wmataApi.getRailPredictions(callback, predictions);
+      } else callback(null, predictions);
+    });
   }
 
 };

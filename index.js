@@ -84,9 +84,14 @@ app.get('/bang', function(request, response) {
   //   else response.json(json);
   // });
 
-  wmataApi.getRailStationList(function(error, stations) {
+  // wmataApi.getRailStationList(function(error, stations) {
+  //   if (error) response.json({ error: error });
+  //   else response.json(stations);
+  // });
+
+  wmataApi.getRailPredictions(function(error, predictions) {
     if (error) response.json({ error: error });
-    else response.json(stations);
+    else response.json(predictions);
   });
 
 });

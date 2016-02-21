@@ -51,12 +51,18 @@ var WmataRailStationSchema = new Schema({
   StationTogether2: String
 });
 
+var WmataRailPredictionsSchema = new Schema({
+  Trains: Array,
+  timestamp: { type: Date, default: Date.now }
+});
+
 module.exports = {
   busPathModel: mongoose.model('WmataBusPath', WmataBusPathSchema),
   busPredictionsModel: mongoose.model('WmataBusPredictions', WmataBusPredictionsSchema),
   busRouteModel: mongoose.model('WmataBusRoute', WmataBusRouteSchema),
   railStationEntranceModel: mongoose.model('WmataRailStationEntrance', WmataRailStationEntranceSchema),
-  railStationModel: mongoose.model('WmataRailStation', WmataRailStationSchema)
+  railStationModel: mongoose.model('WmataRailStation', WmataRailStationSchema),
+  railPredictionsModel: mongoose.model('WmataRailPredictions', WmataRailPredictionsSchema)
   // railLineModel: mongoose.model('WmataRailLine'),
   // elevatorIncidentModel: mongoose.model('WmataElevatorIncident'),
   // railIncidentModel: mongoose.model('WmataRailIncident')

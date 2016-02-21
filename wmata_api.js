@@ -238,6 +238,27 @@ module.exports = { // WMATA API calls
       if (!error && response.statusCode === 200) callback(null, JSON.parse(body));
       else callback(error || response.statusCode);
     });
+  },
+
+  getRailPredictions: function(callback, fallbackPredictions) {
+    // WMATA real-time rail predictions
+    // https://developer.wmata.com/docs/services/547636a6f9182302184cda78/operations/547636a6f918230da855363f
+    var url = 'https://api.wmata.com/StationPrediction.svc/json/GetPrediction/All' +
+      helpers.renderParamsForUri({ api_key: env.WMATA_KEY });
+    request(url, function(error, response, body) {
+      if (!error && response.statusCode === 200) {
+        var predictions = JSON.parse(body);
+        predictions.timestamp = Date.now();
+        callback(null, predictions);
+        Wmata.railPredictionsModel.findOneAndUpdate({}, predictions, { upsert: true }, function(err) {
+          if (err) console.error(err);
+          else console.log('Predictions updated in db.');
+        })
+      } else if (fallbackPredictions) {
+        callback(null, fallbackPredictions);
+        console.error('Failed to update rail predictions, falling back to old data');
+      } else callback(error || 'ERROR: ' + response.statusCode);
+    });
   }
 
 };
