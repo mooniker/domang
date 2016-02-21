@@ -12,7 +12,6 @@ var request = require('request');
 var helpers = require('./helpers');
 var Wmata = require('./models/wmata'); // models for WMATA API data cached in db
 
-// var TWO_HOURS = 60 * 60 * 1000 * 2;
 
 module.exports = { // WMATA API calls
 
