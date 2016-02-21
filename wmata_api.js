@@ -12,7 +12,6 @@ var request = require('request');
 var helpers = require('./helpers');
 var Wmata = require('./models/wmata'); // models for WMATA API data cached in db
 
-
 module.exports = { // WMATA API calls
 
   getBusStopsNear: function(lat, lon, radius, callback) {
@@ -40,7 +39,7 @@ module.exports = { // WMATA API calls
   },
 
   getRailStationEntrancesNear: function(lat, lon, radius, callback) {
-    // WNATA rail station entrances
+    // WMATA rail station entrances
     // https://developer.wmata.com/docs/services/5476364f031f590f38092507/operations/5476364f031f5909e4fe330f
     var url = 'https://api.wmata.com/Rail.svc/json/jStationEntrances' +
         helpers.renderParamsForUri({
@@ -55,6 +54,23 @@ module.exports = { // WMATA API calls
         callback(null, stops);
       } else callback(error || 'ERROR: WMATA says ' + response.statusCode);
     });
+  },
+
+  getRailStationEntrances: function(callback) {
+    // WMATA rail station entrances ^
+    var url = 'https://api.wmata.com/Rail.svc/json/jStationEntrances' +
+        helpers.renderParamsForUri({ api_key: env.WMATA_KEY });
+    request(url, function(error, response, body) {
+      if (!error && response.statusCode === 200) {
+        var entrances = JSON.parse(body);
+        entrances.timestamp = Date.now();
+        callback(null, entrances);
+        Wmata.railStationEntranceModel.findOneAndUpdate({}, entrances, { upsert: true }, function(err) {
+          if (err) console.error(err);
+          else console.log('Updated rail entrances in db.');
+        })
+      } else callback(error || 'ERROR: WMATA says ' + response.statusCode);
+    })
   },
 
   getBusRoutes: function(callback, fallbackRoutes) {
@@ -187,7 +203,7 @@ module.exports = { // WMATA API calls
     // WMATA rail station info
     // https://developer.wmata.com/docs/services/5476364f031f590f38092507/operations/5476364f031f5909e4fe3311
     var url = 'https://api.wmata.com/Rail.svc/json/jStations' +
-      helpers.renderParamsUri({ api_key: WMATA_KEY });
+      helpers.renderParamsForUri({ api_key: env.WMATA_KEY });
     request(url, function(error, response, body) {
       if (!error && response.statusCode === 200) {
         var stations = JSON.parse(body);
@@ -197,6 +213,9 @@ module.exports = { // WMATA API calls
           if (err) console.error(err);
           else console.log('Updated rail stations in db.');
         });
+        stations.forEach(function(station) {
+          // let us the entrances
+        })
       } else if (fallbackStations) {
         callback(null, fallbackStations);
         console.error(error || 'ERROR: WMATA says ' + response.statusCode + '.');

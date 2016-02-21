@@ -44,12 +44,10 @@ var cabi = require('./cabi'); // capital bikeshare API
 
 app.get('/bang', function(request, response) {
 
-  wmataApi.getBusStopsNear(places.mcPhersonSq.lat, places.mcPhersonSq.lng, 500, function(error, json) {
-    if (error) response.json({ error: error });
-    else {
-      response.json(json);
-    }
-  });
+  // wmataApi.getBusStopsNear(places.mcPhersonSq.lat, places.mcPhersonSq.lng, 500, function(error, json) {
+  //   if (error) response.json({ error: error });
+  //   else response.json(json);
+  // });
 
   // wmata.getNextBuses('1001185', function(error, json) {
   //   if (error) response.json({ error: error });
@@ -81,9 +79,14 @@ app.get('/bang', function(request, response) {
   //   else response.json(routes);
   // });
 
-  wmata.getRailStationEntrancesNear(places.mcPhersonSq.lat, places.mcPhersonSq.lng, 500, function(error, json) {
+  // wmata.getRailStationEntrancesNear(places.mcPhersonSq.lat, places.mcPhersonSq.lng, 500, function(error, json) {
+  //   if (error) response.json({ error: error });
+  //   else response.json(json);
+  // });
+
+  wmataApi.getRailStationList(function(error, stations) {
     if (error) response.json({ error: error });
-    else response.json(json);
+    else response.json(stations);
   });
 
 });
@@ -110,6 +113,15 @@ app.get('/stops/:lat/:long/:rad', function(request, response) {
     if (error) {
       response.json({ error: error });
       console.error('ERROR getting bus stops:', error);
+    } else response.json(json);
+  });
+});
+
+app.get('/entrances/:lat/:long/:rad', function(request, response) {
+  wmataApi.getRailStationEntrancesNear(request.params.lat, request.params.long, request.params.rad, function(error, json) {
+    if (error) {
+      response.json({ error: error });
+      console.error('ERROR getting rail station entrances:', error);
     } else response.json(json);
   });
 });

@@ -6,27 +6,40 @@
 
   app.controller('MapController', ['$scope', '$http', '$timeout', 'leafletMapEvents', 'geolocation', function($scope, $http, $timeout, leafletMapEvents, geolocation) {
 
+    var ICON_SIZE = [32, 37],
+        ICON_ANCHOR = [16, 34];
+
     var local_icons = {
       default_icon: {},
       brown_bus_stop_icon: {
         iconUrl: '/icons/brown/busstop.png',
-        iconSize: [32, 37],
-        iconAnchor: [16, 34],
+        iconSize: ICON_SIZE,
+        iconAnchor: ICON_ANCHOR,
       },
       blue_bus_stop_icon: {
         iconUrl: '/icons/blue/busstop.png',
-        iconSize: [32, 37],
-        iconAnchor: [16, 34]
+        iconSize: ICON_SIZE,
+        iconAnchor: ICON_ANCHOR
       },
       brown_cycling_icon: {
         iconUrl: '/icons/brown/cycling.png',
-        iconSize: [32, 37],
-        iconAnchor: [16, 34]
+        iconSize: ICON_SIZE,
+        iconAnchor: ICON_ANCHOR
       },
       blue_cycling_icon: {
         iconUrl: '/icons/blue/cycling.png',
-        iconSize: [32, 37],
-        iconAnchor: [16, 34]
+        iconSize: ICON_SIZE,
+        iconAnchor: ICON_ANCHOR
+      },
+      blue_metro_icon: {
+        iconUrl: '/icons/blue/underground.png',
+        iconSize: ICON_SIZE,
+        iconAnchor: ICON_ANCHOR
+      },
+      brown_metro_icon: {
+        iconUrl: '/icons/brown/underground.png',
+        iconSize: ICON_SIZE,
+        iconAnchor: ICON_ANCHOR
       }
     };
 
@@ -115,6 +128,7 @@
     };
     $scope.selectedBusStops = {};
     $scope.routes = [];
+    $scope.railStations = {};
 
     $scope.filterLatLngsToMap = function(latlngs) {
       return latlngs.filter(function(latlng) {
@@ -221,6 +235,7 @@
         map.updateTimer = $timeout(function() {
           console.log('Fetching bus stops');
           map.getNearbyBusStops();
+          map.getNearbyRailStations();
           map.getNearbyCabiStations();
           map.redrawBusPaths();
           $scope.updateMarkers();
@@ -236,15 +251,19 @@
         if ($scope.markers[args.modelName].icon == local_icons.brown_bus_stop_icon) {
           $scope.markers[args.modelName].icon = local_icons.blue_bus_stop_icon;
           $scope.selectBusStop(args.modelName);
-        } else { // if bicycling
+        } else if ($scope.markers[args.modelName].icon == local_icons.brown_cycling_icon) { // if bicycling
           $scope.markers[args.modelName].icon = local_icons.blue_cycling_icon;
+        } else { // if metro
+          $scope.markers[args.modelName].icon = local_icons.blue_metro_icon;
         }
       } else {
         if ($scope.markers[args.modelName].icon == local_icons.blue_bus_stop_icon) {
           $scope.markers[args.modelName].icon = local_icons.brown_bus_stop_icon;
           $scope.deselectBusStop(args.modelName);
-        } else { // if bicycling
+        } else if ($scope.markers[args.modelName].icon == local_icons.blue_cycling_icon) { // if bicycling
           $scope.markers[args.modelName].icon = local_icons.brown_cycling_icon;
+        } else { // if metro
+          $scope.markers[args.modelName].icon = local_icons.brown_metro_icon;
         }
 
       }
@@ -308,6 +327,25 @@
       // }, 200);
     };
 
+    $scope.addEntranceMarker = function(data) {
+      console.log('Adding rail station entrance marker:', data);
+      $scope.markers[data.Name] = {
+        lat: data.Lat,
+        lng: data.Lon,
+        title: data.Name,
+        StationCode1: data.StationCode1,
+        StationCode2: data.StationCode2,
+        Description: data.Description,
+        display: false,
+        draggable: false,
+        clickable: true,
+        keyboard: true,
+        riseOnHover: true,
+        icon: local_icons.blue_metro_icon,
+        events: {}
+      };
+    };
+
     $scope.addCabiMarker = function(data) {
       $scope.markers[data.id[0]] = {
         lat: parseFloat(data.lat[0]),
@@ -326,7 +364,7 @@
         riseOnHover: true,
         icon: local_icons.brown_cycling_icon,
         events: {}
-      }
+      };
     };
 
     this.getNearbyBusStops = function() {
@@ -344,7 +382,20 @@
       }, function errorCallback(response) {
         console.log('Error getting nearby bus stops:', response);
       });
-    },
+    };
+
+    this.getNearbyRailStations = function() {
+      console.log('Getting rail stations');
+      $http({
+        method: 'GET',
+        url: '/entrances/' + $scope.center.lat + '/' + $scope.center.lng + '/500'
+      }).then(function successfulCallback(response) {
+        for (let i = 0; i < response.data.length; i++) {
+          var entrance = response.data[i];
+          $scope.addEntranceMarker(entrance);
+        }
+      });
+    };
 
     this.getNearbyCabiStations = function() {
       $http({

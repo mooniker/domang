@@ -6,6 +6,18 @@ var TWO_HOURS = 60 * 60 * 1000 * 2;
 
 module.exports = {
 
+  // getRailStationEntrancesNear: function(lat, lon, radius, callback) {
+  //   wmataApi.getRailStationEntrancesNear(lat, lon, radius, function(error, entrances) {
+  //     if (error) callback(error);
+  //     else {
+  //
+  //       stations.forEach(function(station) {
+  //
+  //       });
+  //     }
+  //   });
+  // },
+
   getNextBuses: function(stopId, callback) {
     Wmata.busPredictionsModel.findOne({ StopID: stopId }, function(error, predictions) {
       if (error) callback(error);
@@ -35,7 +47,12 @@ module.exports = {
   },
 
   getRailStationList: function(callback) {
-
+    Wmata.railStationModel.findOne({}, function(error, stationsData) {
+      if (error) callback(error);
+      else if (!stationsData || Date.now() - statinosData.updated_at > TWO_HOURS) {
+        wmataApi.getRailStationList(callback, stationsData);
+      } else callback(null, stationsData);
+    });
   },
 
   getPathShapesAsLatLngs: function(routeId, callback) {
