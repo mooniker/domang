@@ -53,7 +53,7 @@ nav ul li {
   padding-right: 0.4em;
 }
 
-.selected {
+.selected-path {
   color: white;
   background: black;
 }

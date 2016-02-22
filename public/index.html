@@ -28,6 +28,7 @@
               <option selected disabled>where</option>
             </select>
           </li>
+          <li data-ng-repeat="path in selectedPaths"><button class="selected-path" data-ng-click="toggleRouteDisplay(path)">{{path}}</button></li>
         </ul>
       </nav>
     </header>

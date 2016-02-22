@@ -188,7 +188,7 @@
     $scope.selectedMarkers = [];
     $scope.selectedBusStops = {};
     $scope.unusedMarkers = {};
-    $scope.routes = [];
+    $scope.selectedPaths = [];
     $scope.railStations = {};
 
     $scope.filterLatLngsToMap = function(latlngs) {
@@ -235,19 +235,19 @@
 
     this.redrawBusPaths = function() {
       $scope.paths = {};
-      for (let i = 0; i < $scope.routes.length; i++) {
-        map.drawBusPath($scope.routes[i]);
+      for (let i = 0; i < $scope.selectedPaths.length; i++) {
+        map.drawBusPath($scope.selectedPaths[i]);
       }
     };
 
     $scope.toggleRouteDisplay = function(routeId) {
       console.log(routeId);
-      var index = $scope.routes.indexOf(routeId);
+      var index = $scope.selectedPaths.indexOf(routeId);
       if (index === -1) {
-        $scope.routes.push(routeId);
+        $scope.selectedPaths.push(routeId);
         map.drawBusPath(routeId);
       } else {
-        $scope.routes.splice(index, 1);
+        $scope.selectedPaths.splice(index, 1);
         map.redrawBusPaths();
       }
     };
