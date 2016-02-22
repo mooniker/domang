@@ -1,3 +1,5 @@
+'use strict';
+
 var cabi = require('node-capital-bikeshare');
 
 var request = require('request');
@@ -39,6 +41,20 @@ module.exports = {
           {latitude: lat, longitude: lng},
           {latitude: station.lat, longitude: station.long});
       }));
+    });
+  },
+
+  getStation: function(id, callback) {
+    this.getSystemXmlAsJson(function(error, json) {
+      if (error) callback(error);
+      else {
+        for (let i = 0; i < json.length; i++) {
+          if (json[i].id == id) {
+            callback(null, json[i]);
+            break;
+          }
+        }
+      }
     });
   }
 

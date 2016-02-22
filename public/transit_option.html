@@ -31,4 +31,9 @@
     </tr>
   </table>
   <p data-ng-if="marker.Trains.length === 0">No train predictions</p>
+  <ul data-ng-show="marker.nbBikes >= 0">
+    <li>Bikes ready to ride: {{marker.nbBikes}}</li>
+    <li>Empty docks: {{marker.nbEmptyDocks}}</li>
+    <!-- <li>Last updated: FIXME {{marker.latestUpdateTime.toString()}}</li> -->
+  </ul>
 </div>

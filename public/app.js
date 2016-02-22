@@ -304,7 +304,26 @@
       });
     };
 
-    // $scope.updateCabiMarker = function(id)
+    $scope.updateCabiMarker = function(id) {
+      if (Date.now() - $scope.markers[id].latestUpdateTime > 30 * 1000) {
+        $http({
+          method: 'GET',
+          url: '/cabistation/' + id
+        }).then(function successfulCallback(response) {
+          if (response.data.error) console.log('Error:', response.data.error);
+          else {
+            if ($scope.markers[id]) {
+              $scope.markers[id].lastCommWithServer = response.data.lastCommWithServer;
+              $scope.markers[id].ngBikes = response.data.ngBikes;
+              $scope.markers[id].ngEmptyDocks = response.data.ngEmptyDocks;
+              $scope.markers[id].latestUpdateTime = response.data.latestUpdateTime;
+            } else {
+              $scope.addCabiMarker(response.data);
+            }
+          }
+        })
+      }
+    };
 
     $scope.updateMarkers = function() {
       let keys = Object.keys($scope.markers);
@@ -477,16 +496,16 @@
     };
 
     $scope.addCabiMarker = function(data) {
-      $scope.markers[data.id[0]] = {
-        lat: parseFloat(data.lat[0]),
-        lng: parseFloat(data.long[0]),
-        title: data.name[0],
-        nbBikes: data.nbBikes[0],
-        nbEmptyDocks: data.nbEmptyDocks[0],
-        cabiId: data.id[0],
-        installed: data.installed[0],
-        temporary: data.temporary[0],
-        public: data.public[0],
+      $scope.markers[data.id] = {
+        lat: parseFloat(data.lat),
+        lng: parseFloat(data.long),
+        title: data.name,
+        nbBikes: data.nbBikes,
+        nbEmptyDocks: data.nbEmptyDocks,
+        cabiId: data.id,
+        installed: data.installed,
+        temporary: data.temporary,
+        public: data.public,
         display: false,
         selected: $scope.selectedMarkers.indexOf(data.id[0]) > -1,
         draggable: false,
@@ -497,6 +516,9 @@
         selectedIcon: local_icons.selected.cabi,
         unselectedIcon: local_icons.unselected.cabi,
         highlightedIcon: local_icons.highlighted.cabi,
+        update: function() {
+          $scope.updateCabiMarker(this.cabiId);
+        },
         events: {}
       };
       // add in data from unusedMarker if it exists, then delete it
@@ -533,7 +555,7 @@
     this.getNearbyCabiStations = function() {
       $http({
         method: 'GET',
-        url: '/cabi/' + $scope.center.lat + '/' + $scope.center.lng
+        url: '/cabi/' + $scope.center.lat + '/' + $scope.center.lng + '/' + RAD
       }).then(function successfulCallback(response) {
         if (response.data.error) console.log('Error getting cabi stations', response.data.error);
         else {

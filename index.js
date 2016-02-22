@@ -99,9 +99,14 @@ app.get('/bang', function(request, response) {
   //   else response.json(json);
   // });
 
-  cabi.getStationsNear(places.shaw.lat, places.shaw.lng, 500, function(error, stations) {
+  // cabi.getStationsNear(places.shaw.lat, places.shaw.lng, 500, function(error, stations) {
+  //   if (error) response.json({ error: error });
+  //   else response.json(stations);
+  // });
+
+  cabi.getStation(47, function(error, station) {
     if (error) response.json({ error: error });
-    else response.json(stations);
+    else response.json(station);
   });
 
 });
@@ -150,8 +155,19 @@ app.get('/path/:id', function(request, response) {
   });
 });
 
-app.get('/cabi/:lat/:lng', function(request, response) {
-  cabi.getNearbyCabiStations(request.params.lat, request.params.lng, function(error, json) {
+app.get('/cabi/:lat/:lng/:rad', function(request, response) {
+  // cabi.getNearbyCabiStations(request.params.lat, request.params.lng, function(error, json) {
+  //   if (error) response.json({ error: error });
+  //   else response.json(json);
+  // });
+  cabi.getStationsNear(request.params.lat, request.params.lng, request.params.rad, function(error, stations) {
+    if (error) response.json({ error: error });
+    else response.json(stations);
+  });
+});
+
+app.get('/cabistation/:id', function(request, response) {
+  cabi.getStation(request.params.id, function(error, json) {
     if (error) response.json({ error: error });
     else response.json(json);
   });
