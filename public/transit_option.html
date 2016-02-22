@@ -13,7 +13,7 @@
     </tr>
     <tr data-ng-repeat="prediction in marker.Predictions | orderBy:'+Minutes'">
       <td>{{prediction.Minutes > 0 ? prediction.Minutes : 'arriving'}}</td>
-      <td><button data-ng-class="{ 'selected': routes.indexOf(prediction.RouteID) != -1 }" data-ng-click="toggleRouteDisplay(prediction.RouteID)">{{prediction.RouteID}}</button></td>
+      <td><button data-ng-class="{ 'selected-path': selectedPaths.indexOf(prediction.RouteID) != -1 }" data-ng-click="toggleRouteDisplay(prediction.RouteID)">{{prediction.RouteID}}</button></td>
       <td>{{prediction.DirectionText}}</td>
     </tr>
   </table>
