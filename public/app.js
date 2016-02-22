@@ -291,13 +291,14 @@
     };
 
     $scope.updateMetroMarker = function(markerId, stationCode) {
+      console.log('updateMetroMarker');
       $http({
         method: 'GET',
         url: '/station/' + stationCode
       }).then(function successfulCallback(response) {
         if (response.data.error) console.log('Error:', response.data.error);
         else {
-          // console.log(response.data);
+          // console.log('hey hey hey', stationCode, response.data);
           $scope.markers[markerId].Trains = response.data;
         }
       });

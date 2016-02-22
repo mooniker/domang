@@ -84,23 +84,18 @@ module.exports = {
   getRailPredictions: function(callback) {
     Wmata.railPredictionsModel.findOne({}, function(error, predictions) {
       if (error) callback(error);
-      else if (!predictions || Date.now() - predictions.timestamp > DATA_AGE_LIMIT) {
+      else if (!predictions || Date.now() - predictions.timestamp > 1000 * 20) {
         wmataApi.getRailPredictions(callback, predictions);
       } else callback(null, predictions);
     });
   },
 
   getNextTrains: function(stationCode, callback) {
-    this.getRailPredictions(function(error, trains) {
+    this.getRailPredictions(function(error, predictions) {
       if (error) callback(error);
-      else {
-        Wmata.railPredictionsModel.findOne({}, function(err, predictions) {
-          if (err) callback(error);
-          else callback(null, predictions.Trains.filter(function(prediction) {
-            return prediction.DestinationCode === stationCode;
-          }));
-        });
-      }
+      else callback(null, predictions.Trains.filter(function(prediction) {
+          return prediction.LocationCode === stationCode;
+        }));
     });
   }
 

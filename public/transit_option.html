@@ -17,5 +17,18 @@
       <td>{{prediction.DirectionText}}</td>
     </tr>
   </table>
-  <p data-ng-if="marker.Predictions.length === 0">No predictions</p>
+  <p data-ng-if="marker.Predictions.length === 0">No train predictions</p>
+  <table data-ng-if="marker.Trains.length > 0">
+    <tr>
+      <th>min</th>
+      <th>line</th>
+      <th>destination</th>
+    </tr>
+    <tr data-ng-repeat="train in marker.Trains">
+      <td>{{train.Min}}</td>
+      <td>{{train.Line}}{{train.Car}}</td>
+      <td>{{train.Destination}}</td>
+    </tr>
+  </table>
+  <p data-ng-if="marker.Predictions.length === 0">No bus predictions</p>
 </div>
