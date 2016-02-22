@@ -1,0 +1,21 @@
+<div class="transit-option" data-ng-show="marker.selected">
+  <p>
+    {{marker.Name || marker.title }}
+    <span class="active-routes" data-ng-show="marker.active_routes">
+      <button data-ng-repeat="route in marker.active_routes" data-ng-class="{ 'selected': routes.indexOf(route) != -1 }" data-ng-click="toggleRouteDisplay(route)">{{route}}</button>
+    </span>
+  </p>
+  <table data-ng-if="marker.Predictions.length > 0">
+    <tr>
+      <th>min</th>
+      <th>rt</th>
+      <th>dir</th>
+    </tr>
+    <tr data-ng-repeat="prediction in marker.Predictions | orderBy:'+Minutes'">
+      <td>{{prediction.Minutes > 0 ? prediction.Minutes : 'arriving'}}</td>
+      <td><button data-ng-class="{ 'selected': routes.indexOf(prediction.RouteID) != -1 }" data-ng-click="toggleRouteDisplay(prediction.RouteID)">{{prediction.RouteID}}</button></td>
+      <td>{{prediction.DirectionText}}</td>
+    </tr>
+  </table>
+  <p data-ng-if="marker.Predictions.length === 0">No predictions</p>
+</div>

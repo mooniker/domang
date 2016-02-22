@@ -2,7 +2,7 @@
 
 (function() {
 
-  var RAD = 400; // meters, default radius for geolocation searches
+  var RAD = 400; // default radius in meters for geolocation searches
 
   var app = angular.module('domang', ['ui-leaflet', 'geolocation']);
 
@@ -42,6 +42,57 @@
         iconUrl: '/icons/brown/underground.png',
         iconSize: ICON_SIZE,
         iconAnchor: ICON_ANCHOR
+      },
+      selected: {
+        busStop: {
+          iconUrl: '/icons/blue/busstop.png',
+          iconSize: ICON_SIZE,
+          iconAnchor: ICON_ANCHOR
+        },
+        metro: {
+          iconUrl: '/icons/blue/underground.png',
+          iconSize: ICON_SIZE,
+          iconAnchor: ICON_ANCHOR
+        },
+        cabi: {
+          iconUrl: '/icons/blue/cycling.png',
+          iconSize: ICON_SIZE,
+          iconAnchor: ICON_ANCHOR
+        },
+      },
+      unselected: {
+        busStop: {
+          iconUrl: '/icons/brown/busstop.png',
+          iconSize: ICON_SIZE,
+          iconAnchor: ICON_ANCHOR
+        },
+        metro: {
+          iconUrl: '/icons/brown/underground.png',
+          iconSize: ICON_SIZE,
+          iconAnchor: ICON_ANCHOR
+        },
+        cabi: {
+          iconUrl: '/icons/brown/cycling.png',
+          iconSize: ICON_SIZE,
+          iconAnchor: ICON_ANCHOR
+        }
+      },
+      highlighted: {
+        busStop: {
+          iconUrl: '/icons/cyan/busstop.png',
+          iconSize: ICON_SIZE,
+          iconAnchor: ICON_ANCHOR
+        },
+        metro: {
+          iconUrl: '/icons/cyan/underground.png',
+          iconSize: ICON_SIZE,
+          iconAnchor: ICON_ANCHOR
+        },
+        cabi: {
+          iconUrl: '/icons/cyan/cycling.png',
+          iconSize: ICON_SIZE,
+          iconAnchor: ICON_ANCHOR
+        }
       }
     };
 
@@ -134,7 +185,9 @@
       console.log(map.neighborhoodSelector);
       map.goToLocation(map.neighborhoodSelector.lat, map.neighborhoodSelector.lng);
     };
+    $scope.selectedMarkers = [];
     $scope.selectedBusStops = {};
+    $scope.unusedMarkers = {};
     $scope.routes = [];
     $scope.railStations = {};
 
@@ -201,25 +254,40 @@
 
     this.updateTimer = undefined; // for metering down updates to no more than once/second
 
-    $scope.selectBusStop = function(busStopId) {
+    // $scope.selectBusStop = function(busStopId) {
+    //   $http({
+    //     method: 'GET',
+    //     url: '/stop/' + busStopId
+    //   }).then(function successfulCallback(response) {
+    //     if (response.data.error) console.log('Error:', response.data.error);
+    //     else {
+    //       // console.log(response.data);
+    //       $scope.selectedBusStops[busStopId] = response.data;
+    //       // TODO optionally active_routes could be calculated and added here clientside
+    //     }
+    //   }, function errorCallback(response) {
+    //     console.log('Error getting bus predictions:', response);
+    //   });
+    // };
+    //
+    // $scope.deselectBusStop = function(busStopId) {
+    //   delete $scope.selectedBusStops[busStopId];
+    //   $scope.markers[busStopId].icon = local_icons.brown_bus_stop_icon;
+    // };
+
+    $scope.updateBusMarker = function(markerId) {
       $http({
         method: 'GET',
-        url: '/stop/' + busStopId
+        url: '/stop/' + markerId
       }).then(function successfulCallback(response) {
         if (response.data.error) console.log('Error:', response.data.error);
         else {
-          // console.log(response.data);
-          $scope.selectedBusStops[busStopId] = response.data;
-          // TODO optionally active_routes could be calculated and added here clientside
+          console.log(response.data);
+          $scope.markers[markerId].Predictions = response.data.Predictions;
+          $scope.markers[markerId].active_routes = response.data.active_routes;
+          $scope.markers[markerId].timestamp = response.data.timestamp;
         }
-      }, function errorCallback(response) {
-        console.log('Error getting bus predictions:', response);
       });
-    };
-
-    $scope.deselectBusStop = function(busStopId) {
-      delete $scope.selectedBusStops[busStopId];
-      $scope.markers[busStopId].icon = local_icons.brown_bus_stop_icon;
     };
 
     $scope.updateMarkers = function() {
@@ -232,16 +300,19 @@
           { latitude: $scope.center.lat, longitude: $scope.center.lng },
           { latitude: $scope.markers[key].lat, longitude: $scope.markers[key].lng }
         ) > 600)) { // if so, delete it
+          // move it to unused marker collection
+          $scope.unusedMarkers[key] = $scope.markers[key];
+          // delete it from page
           delete $scope.markers[key];
+          // console.log(key, 'moved to unusedMarkers:', $scope.unusedMarkers);
         }
       }
     }
 
     this.recenterMap = function() {
-      console.log('Map recentered.');
+      console.log('Map recentered, updating map.');
       if (!angular.isDefined(map.updateTimer)) {
         map.updateTimer = $timeout(function() {
-          console.log('Fetching bus stops');
           map.getNearbyBusStops();
           map.getNearbyRailStations();
           map.getNearbyCabiStations();
@@ -252,30 +323,46 @@
       }
     };
 
+    $scope.toggleMarker = function(markerId) {
+      let index = $scope.selectedMarkers.indexOf(markerId);
+      if (index === -1) { // toggle on
+        // change color
+        $scope.markers[markerId].icon = $scope.markers[markerId].selectedIcon;
+        $scope.selectedMarkers.push(markerId);
+        $scope.markers[markerId].update();
+      } else { // toggle off
+        // change color
+        $scope.markers[markerId].icon = $scope.markers[markerId].unselectedIcon;
+        // remove from selected array
+        $scope.selectedMarkers.splice(index, 1);
+      }
+      console.log('Selected markers:', $scope.selectedMarkers);
+    };
+
     $scope.$on('leafletDirectiveMarker.click', function(e, args) {
       // Args will contain the marker name and other relevant information
-      $scope.markers[args.modelName].display = !$scope.markers[args.modelName].display;
-      if ($scope.markers[args.modelName].display) {
-        if ($scope.markers[args.modelName].icon == local_icons.brown_bus_stop_icon) {
-          $scope.markers[args.modelName].icon = local_icons.blue_bus_stop_icon;
-          $scope.selectBusStop(args.modelName);
-        } else if ($scope.markers[args.modelName].icon == local_icons.brown_cycling_icon) { // if bicycling
-          $scope.markers[args.modelName].icon = local_icons.blue_cycling_icon;
-        } else { // if metro
-          $scope.markers[args.modelName].icon = local_icons.blue_metro_icon;
-        }
-      } else {
-        if ($scope.markers[args.modelName].icon == local_icons.blue_bus_stop_icon) {
-          $scope.markers[args.modelName].icon = local_icons.brown_bus_stop_icon;
-          $scope.deselectBusStop(args.modelName);
-        } else if ($scope.markers[args.modelName].icon == local_icons.blue_cycling_icon) { // if bicycling
-          $scope.markers[args.modelName].icon = local_icons.brown_cycling_icon;
-        } else { // if metro
-          $scope.markers[args.modelName].icon = local_icons.brown_metro_icon;
-        }
-
-      }
-      // map.getRoutes();
+      // $scope.markers[args.modelName].display = !$scope.markers[args.modelName].display;
+      // if ($scope.markers[args.modelName].display) {
+      //   if ($scope.markers[args.modelName].icon == local_icons.brown_bus_stop_icon) {
+      //     $scope.markers[args.modelName].icon = local_icons.blue_bus_stop_icon;
+      //     $scope.selectBusStop(args.modelName);
+      //   } else if ($scope.markers[args.modelName].icon == local_icons.brown_cycling_icon) { // if bicycling
+      //     $scope.markers[args.modelName].icon = local_icons.blue_cycling_icon;
+      //   } else { // if metro
+      //     $scope.markers[args.modelName].icon = local_icons.blue_metro_icon;
+      //   }
+      // } else {
+      //   if ($scope.markers[args.modelName].icon == local_icons.blue_bus_stop_icon) {
+      //     $scope.markers[args.modelName].icon = local_icons.brown_bus_stop_icon;
+      //     $scope.deselectBusStop(args.modelName);
+      //   } else if ($scope.markers[args.modelName].icon == local_icons.blue_cycling_icon) { // if bicycling
+      //     $scope.markers[args.modelName].icon = local_icons.brown_cycling_icon;
+      //   } else { // if metro
+      //     $scope.markers[args.modelName].icon = local_icons.brown_metro_icon;
+      //   }
+      // }
+      $scope.markers[args.modelName].selected = !$scope.markers[args.modelName].selected;
+      $scope.toggleMarker(args.modelName);
     });
 
     $scope.$watch('paths', this.drawPaths);
@@ -283,7 +370,7 @@
     $scope.$watch('center.lat || center.lng', this.recenterMap);
 
     $scope.addBusPath = function(routeId, latLngs) {
-      console.log('Adding', routeId);
+      // console.log('Adding', routeId);
       $scope.paths[routeId] = {
         color: '#008000',
         weight: 8,
@@ -291,13 +378,13 @@
       };
     };
 
-    $scope.clearMarkers = function() {
-      $scope.markers = {};
-    };
-
-    $scope.removeStopMarker = function(stopId) {
-      delete $scope.markers[stopId];
-    };
+    // $scope.clearMarkers = function() {
+    //   $scope.markers = {};
+    // };
+    //
+    // $scope.removeStopMarker = function(stopId) {
+    //   delete $scope.markers[stopId];
+    // };
 
     $scope.addStopMarker = function(stop) {
       if ($scope.markers[stop.StopID]) {
@@ -310,13 +397,21 @@
           routes: stop.Routes,
           stopId: stop.StopID,
           display: false,
+          selected: $scope.selectedMarkers.indexOf(stop.StopID) > -1,
           draggable: false,
           clickable: true,
           keyboard: true,
           riseOnHover: true,
           icon: local_icons.brown_bus_stop_icon,
+          selectedIcon: local_icons.selected.busStop,
+          unselectedIcon: local_icons.unselected.busStop,
+          highlightedIcon: local_icons.highlighted.busStop,
+          update: function() {
+            $scope.updateBusMarker(this.stopId);
+          },
           events: {}
         };
+        // add in data from unusedMarker if it exists, then delete it
       }
 
       // setTimeout(function() { // FIXME this causes way too many API calls to WMATA and locks up the markers till finished - not good
@@ -336,7 +431,7 @@
     };
 
     $scope.addEntranceMarker = function(data) {
-      console.log('Adding rail station entrance marker:', data);
+      // console.log('Adding rail station entrance marker:', data);
       $scope.markers[data.Name] = {
         lat: data.Lat,
         lng: data.Lon,
@@ -348,13 +443,18 @@
         StationName2: data.StationName2,
         Description: data.Description,
         display: false,
+        selected: $scope.selectedMarkers.indexOf(data.Name) > -1,
         draggable: false,
         clickable: true,
         keyboard: true,
         riseOnHover: true,
         icon: local_icons.brown_metro_icon,
+        selectedIcon: local_icons.selected.metro,
+        unselectedIcon: local_icons.unselected.metro,
+        highlightedIcon: local_icons.highlighted.metro,
         events: {}
       };
+      // add in data from unusedMarker if it exists, then delete it
     };
 
     $scope.addCabiMarker = function(data) {
@@ -369,13 +469,18 @@
         temporary: data.temporary[0],
         public: data.public[0],
         display: false,
+        selected: $scope.selectedMarkers.indexOf(data.id[0]) > -1,
         draggable: false,
         clickable: true,
         keyboard: true,
         riseOnHover: true,
         icon: local_icons.brown_cycling_icon,
+        selectedIcon: local_icons.selected.cabi,
+        unselectedIcon: local_icons.unselected.cabi,
+        highlightedIcon: local_icons.highlighted.cabi,
         events: {}
       };
+      // add in data from unusedMarker if it exists, then delete it
     };
 
     this.getNearbyBusStops = function() {
@@ -384,10 +489,8 @@
         url: '/stops/' + $scope.center.lat + '/' + $scope.center.lng + '/' + RAD + '/'
       }).then(function successfulCallback(response) {
         for (var i = 0; i < response.data.length; i++) {
-          // console.log('YAY:', response.data[i]);
           var busStopData = response.data[i];
-          // busStopData.display = false;
-          // $scope.busStops.push(busStopData);
+          // console.log(busStopData);
           $scope.addStopMarker(busStopData);
         }
       }, function errorCallback(response) {
@@ -396,7 +499,7 @@
     };
 
     this.getNearbyRailStations = function() {
-      console.log('Getting rail stations');
+      // console.log('Getting rail stations');
       $http({
         method: 'GET',
         url: '/entrances/' + $scope.center.lat + '/' + $scope.center.lng + '/' + RAD
@@ -442,5 +545,11 @@
     };
   });
 
+  app.directive('transitOption', function() {
+    return {
+      restrict: 'E',
+      templateUrl: 'transit_option.html'
+    };
+  });
 
 })();

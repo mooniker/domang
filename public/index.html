@@ -40,7 +40,8 @@
           Lng: <input type="number" step="any" data-ng-model="center.lng" />
           Zoom: <input type="number" step="any" data-ng-model="center.zoom" />
         </form> -->
-        <bus-stop data-ng-repeat="stop in selectedBusStops"></bus-stop>
+        <!-- <bus-stop data-ng-repeat="stop in selectedBusStops"></bus-stop> -->
+        <transit-option data-ng-repeat="marker in markers"></transit-option>
       </div>
       <div class="col">
         <leaflet lf-center="center" markers="markers" paths="paths" defaults="defaults" class="map"></leaflet>
