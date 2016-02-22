@@ -89,9 +89,19 @@ app.get('/bang', function(request, response) {
   //   else response.json(stations);
   // });
 
-  wmataApi.getRailPredictions(function(error, predictions) {
+  // wmataApi.getRailPredictions(function(error, predictions) {
+  //   if (error) response.json({ error: error });
+  //   else response.json(predictions);
+  // });
+
+  // cabi.getSystemXml(function(error, json) {
+  //   if (error) response.json({ error: error });
+  //   else response.json(json);
+  // });
+
+  cabi.getStationsNear(places.shaw.lat, places.shaw.lng, 500, function(error, stations) {
     if (error) response.json({ error: error });
-    else response.json(predictions);
+    else response.json(stations);
   });
 
 });

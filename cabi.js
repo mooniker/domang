@@ -1,5 +1,9 @@
 var cabi = require('node-capital-bikeshare');
 
+var request = require('request');
+var parser = require('xml2json');
+var geolib = require('geolib');
+
 module.exports = {
 
   getAllCabiStations: function(callback) {
@@ -14,7 +18,30 @@ module.exports = {
       if (error) callback(error);
       else callback(null, data);
     });
+  },
+
+  getSystemXmlAsJson: function(callback) {
+    // sys data
+    var url = 'http://www.capitalbikeshare.com/data/stations/bikeStations.xml';
+
+    request(url, function(error, response, body) {
+      if (error) callback(error);
+      else callback(null, JSON.parse(parser.toJson(body)).stations.station);
+    });
+
+  },
+
+  getStationsNear: function(lat, lng, rad, callback) {
+    this.getSystemXmlAsJson(function(error, json) {
+      if (error) callback(error);
+      else callback(null, json.filter(function(station) {
+        return rad > geolib.getDistance(
+          {latitude: lat, longitude: lng},
+          {latitude: station.lat, longitude: station.long});
+      }));
+    });
   }
+
 };
 
 // example data:

@@ -304,6 +304,8 @@
       });
     };
 
+    // $scope.updateCabiMarker = function(id)
+
     $scope.updateMarkers = function() {
       let keys = Object.keys($scope.markers);
       for (let i = 0; i < keys.length; i++) {
