@@ -88,6 +88,20 @@ module.exports = {
         wmataApi.getRailPredictions(callback, predictions);
       } else callback(null, predictions);
     });
+  },
+
+  getNextTrains: function(stationCode, callback) {
+    this.getRailPredictions(function(error, trains) {
+      if (error) callback(error);
+      else {
+        Wmata.railPredictionsModel.findOne({}, function(err, predictions) {
+          if (err) callback(error);
+          else callback(null, predictions.Trains.filter(function(prediction) {
+            return prediction.DestinationCode === stationCode;
+          }));
+        });
+      }
+    });
   }
 
 };

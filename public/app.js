@@ -290,6 +290,19 @@
       });
     };
 
+    $scope.updateMetroMarker = function(markerId, stationCode) {
+      $http({
+        method: 'GET',
+        url: '/station/' + stationCode
+      }).then(function successfulCallback(response) {
+        if (response.data.error) console.log('Error:', response.data.error);
+        else {
+          // console.log(response.data);
+          $scope.markers[markerId].Trains = response.data;
+        }
+      });
+    };
+
     $scope.updateMarkers = function() {
       let keys = Object.keys($scope.markers);
       for (let i = 0; i < keys.length; i++) {
@@ -452,6 +465,9 @@
         selectedIcon: local_icons.selected.metro,
         unselectedIcon: local_icons.unselected.metro,
         highlightedIcon: local_icons.highlighted.metro,
+        update: function() {
+          $scope.updateMetroMarker(this.title, this.StationCode1); // or StationCode2? FIXME
+        },
         events: {}
       };
       // add in data from unusedMarker if it exists, then delete it

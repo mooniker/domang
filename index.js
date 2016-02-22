@@ -147,6 +147,13 @@ app.get('/cabi/:lat/:lng', function(request, response) {
   });
 });
 
+app.get('/station/:code', function(request, response) {
+  wmata.getNextTrains(request.params.code, function(error, json) {
+    if (error) response.json({ error: error });
+    else response.json(json);
+  });
+});
+
 var port = env.PORT;
 app.listen(port, function() {
   console.log('Server up and running on port', port + '.');
