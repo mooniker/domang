@@ -25,14 +25,14 @@ module.exports = {
     Wmata.busPredictionsModel.findOne({ StopID: stopId }, function(error, predictions) {
       if (error) callback(error);
       else if (!predictions || Date.now() - predictions.timestamp > DATA_AGE_LIMIT) {
-        console.log('Data is older than', Date.now() - predictions.timestamp, '>', DATA_AGE_LIMIT);
-        console.log('Going to need the WMATA API for this.');
+        // console.log('Data is older than', Date.now() - predictions.timestamp, '>', DATA_AGE_LIMIT);
+        // console.log('Going to need the WMATA API for this.');
         wmataApi.getNextBuses(stopId, callback, predictions);
       } else {
-        console.log('Date is old?', Date.now() - predictions.timestamp > DATA_AGE_LIMIT);
-        console.log(moment(predictions.timestamp).fromNow());
-        console.log('How old is the data?', Date.now(), '-', predictions.timestamp, '=', Date.now() - predictions.timestamp);
-        console.log('Using cached data for bus stop.');
+        // console.log('Date is old?', Date.now() - predictions.timestamp > DATA_AGE_LIMIT);
+        // console.log(moment(predictions.timestamp).fromNow());
+        // console.log('How old is the data?', Date.now(), '-', predictions.timestamp, '=', Date.now() - predictions.timestamp);
+        // console.log('Using cached data for bus stop.');
         callback(null, predictions)
       };
     });
