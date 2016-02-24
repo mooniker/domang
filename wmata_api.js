@@ -131,6 +131,7 @@ module.exports = { // WMATA API calls
       StopID: stopId,
       api_key: env.WMATA_KEY
     });
+    console.log('WmataApi.getNextBuses is happening.');
     request(url, function(error, response, body) {
       if (!error && response.statusCode === 200) {
         var predictionsJson = JSON.parse(body);
@@ -146,6 +147,7 @@ module.exports = { // WMATA API calls
           return activeRoutes.indexOf(elem) === pos;
         });
         predictionsJson.active_routes = activeRoutesUnique;
+        // console.log('predictionsJson:', predictionsJson, 'predictionsJson.timestamp:', predictionsJson.timestamp);
         callback(null, predictionsJson);
         Wmata.busPredictionsModel.findOneAndUpdate({ StopID: stopId }, predictionsJson, { upsert: true }, function(err) {
           if (err) console.error(err);

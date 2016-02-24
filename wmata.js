@@ -1,6 +1,7 @@
 var helpers = require('./helpers');
 var Wmata = require('./models/wmata'); // models for WMATA API data cached in db
 var wmataApi = require('./wmata_api');
+var moment = require('moment');
 
 // var TWO_HOURS = 60 * 60 * 1000 * 2;
 var DATA_AGE_LIMIT = 15 * 1000;
@@ -20,11 +21,20 @@ module.exports = {
   // },
 
   getNextBuses: function(stopId, callback) {
+    console.log('Wmata.getNextBuses checking db for cached data.');
     Wmata.busPredictionsModel.findOne({ StopID: stopId }, function(error, predictions) {
       if (error) callback(error);
       else if (!predictions || Date.now() - predictions.timestamp > DATA_AGE_LIMIT) {
+        console.log('Data is older than', Date.now() - predictions.timestamp, '>', DATA_AGE_LIMIT);
+        console.log('Going to need the WMATA API for this.');
         wmataApi.getNextBuses(stopId, callback, predictions);
-      } else callback(null, predictions);
+      } else {
+        console.log('Date is old?', Date.now() - predictions.timestamp > DATA_AGE_LIMIT);
+        console.log(moment(predictions.timestamp).fromNow());
+        console.log('How old is the data?', Date.now(), '-', predictions.timestamp, '=', Date.now() - predictions.timestamp);
+        console.log('Using cached data for bus stop.');
+        callback(null, predictions)
+      };
     });
   },
 

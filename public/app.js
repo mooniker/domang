@@ -4,7 +4,7 @@
 
   var RAD = 400; // default radius in meters for geolocation searches
 
-  var app = angular.module('domang', ['ui-leaflet', 'geolocation']);
+  var app = angular.module('domang', ['ui-leaflet', 'geolocation', 'angularMoment']);
 
   app.controller('MapController', ['$scope', '$http', '$timeout', 'leafletMapEvents', 'geolocation', function($scope, $http, $timeout, leafletMapEvents, geolocation) {
 
