@@ -1,6 +1,6 @@
 # Domang (aka "Getaway")
 
-_Domang_ (pronounced "doh mahng," which means _getaway_ or _escape_) is the codebase for a MEAN web app that shows nearby real-time transit options based on  geolocation in Washington, D.C. The Node.js/Express backend draws on the [local transit agency APIs](https://developer.wmata.com/) and caches some bus data in Mongo for performance reasons. An Angular frontend renders the map with Leaflet using the [AngularUI Leaflet module/directive](http://angular-ui.github.io/ui-leaflet/).
+_Domang_ (pronounced "doh mahng," which means _getaway_ or _escape_) is an experimental MEAN web app that shows nearby real-time transit and some route options based on geolocation in the Washington, D.C., metropolitan area. The Node.js/Express backend draws on the the [Washington Metropolitan Area Transit Authority's (WMATA) API](https://developer.wmata.com/) for data and caches some bus data in a Mongo database to reduce the number of calls required on the WMATA API. An Angular frontend renders the map with Leaflet using the [AngularUI Leaflet module/directive](http://angular-ui.github.io/ui-leaflet/).
 
 Domang is a work very much in progress.
 
