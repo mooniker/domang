@@ -298,7 +298,7 @@
       }).then(function successfulCallback(response) {
         if (response.data.error) console.log('Error:', response.data.error);
         else {
-          // console.log('hey hey hey', stationCode, response.data);
+          console.log('hey hey hey', stationCode, response.data);
           $scope.markers[markerId].Trains = response.data;
         }
       });

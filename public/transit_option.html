@@ -23,11 +23,13 @@
       <th>min</th>
       <th>line</th>
       <th>destination</th>
+      <th>last updated</th>
     </tr>
     <tr data-ng-repeat="train in marker.Trains">
       <td>{{train.Min}}</td>
       <td>{{train.Line}}{{train.Car}}</td>
       <td>{{train.Destination}}</td>
+      <td><small data-am-time-ago="train.timestamp"></small></td>
     </tr>
   </table>
   <p data-ng-if="marker.Trains.length === 0">No train predictions</p>
@@ -36,5 +38,5 @@
     <li>Empty docks: {{marker.nbEmptyDocks}}</li>
     <!-- <li>Last updated: FIXME {{marker.latestUpdateTime.toString()}}</li> -->
   </ul>
-  <small data-ng-show="marker.timestamp">Last updated: <span am-time-ago="marker.timestamp"></span></small>
+  <small data-ng-show="marker.timestamp">Last updated: <span data-am-time-ago="marker.timestamp"></span></small>
 </div>

@@ -255,6 +255,7 @@ module.exports = { // WMATA API calls
       if (!error && response.statusCode === 200) {
         var predictions = JSON.parse(body);
         predictions.timestamp = Date.now();
+        // console.log('TRAIN PREDICTIONS:', predictions);
         callback(null, predictions);
         Wmata.railPredictionsModel.findOneAndUpdate({}, predictions, { upsert: true }, function(err) {
           if (err) console.error(err);

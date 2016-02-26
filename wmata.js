@@ -32,7 +32,7 @@ module.exports = {
         // console.log('Date is old?', Date.now() - predictions.timestamp > DATA_AGE_LIMIT);
         // console.log(moment(predictions.timestamp).fromNow());
         // console.log('How old is the data?', Date.now(), '-', predictions.timestamp, '=', Date.now() - predictions.timestamp);
-        // console.log('Using cached data for bus stop.');
+        console.log('Using cached data for bus stop.');
         callback(null, predictions)
       };
     });
@@ -103,9 +103,15 @@ module.exports = {
   getNextTrains: function(stationCode, callback) {
     this.getRailPredictions(function(error, predictions) {
       if (error) callback(error);
-      else callback(null, predictions.Trains.filter(function(prediction) {
+      else {
+        var timestamp = predictions.timestamp;
+        callback(null, predictions.Trains.filter(function(prediction) {
           return prediction.LocationCode === stationCode;
+        }).map(function(prediction) {
+          prediction.timestamp = timestamp;
+          return prediction;
         }));
+      }
     });
   }
 
