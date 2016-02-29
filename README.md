@@ -14,5 +14,15 @@ Map marker icons used on this app's map are supplied by [Map Icons Collection](h
 
 ## APIs
 
-- [Arlington Transit (GTFS)](http://www.arlingtontransit.com/pages/rider-tools/tools-for-developers/)
+### transit agencies
+
 - [WMATA](https://developer.wmata.com/)
+
+### agencies using General Transit Feed Specification (GTFS)
+
+- [Arlington Transit](http://www.arlingtontransit.com/pages/rider-tools/tools-for-developers/)
+
+### commercial services
+
+- Car2Go - membership required ($35 one-time fee) to (authorize API access)[https://www.car2go.com/api/login.jsp]
+- Uber
