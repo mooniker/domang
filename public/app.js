@@ -235,7 +235,7 @@
 
     this.redrawBusPaths = function() {
       $scope.paths = {};
-      for (let i = 0; i < $scope.selectedPaths.length; i++) {
+      for (var i = 0; i < $scope.selectedPaths.length; i++) {
         map.drawBusPath($scope.selectedPaths[i]);
       }
     };
@@ -326,9 +326,9 @@
     };
 
     $scope.updateMarkers = function() {
-      let keys = Object.keys($scope.markers);
-      for (let i = 0; i < keys.length; i++) {
-        let key = keys[i];
+      var keys = Object.keys($scope.markers);
+      for (var i = 0; i < keys.length; i++) {
+        var key = keys[i];
         // check if marker does not belong to selected bus stops
         // and is outside the map
         if (!(key in $scope.selectedBusStops) && (geolib.getDistance(
@@ -359,7 +359,7 @@
     };
 
     $scope.toggleMarker = function(markerId) {
-      let index = $scope.selectedMarkers.indexOf(markerId);
+      var index = $scope.selectedMarkers.indexOf(markerId);
       if (index === -1) { // toggle on
         // change color
         $scope.markers[markerId].icon = $scope.markers[markerId].selectedIcon;
@@ -545,7 +545,7 @@
         method: 'GET',
         url: '/entrances/' + $scope.center.lat + '/' + $scope.center.lng + '/' + RAD
       }).then(function successfulCallback(response) {
-        for (let i = 0; i < response.data.length; i++) {
+        for (var i = 0; i < response.data.length; i++) {
           var entrance = response.data[i];
           $scope.addEntranceMarker(entrance);
         }
@@ -559,7 +559,7 @@
       }).then(function successfulCallback(response) {
         if (response.data.error) console.log('Error getting cabi stations', response.data.error);
         else {
-          for (let i = 0; i < response.data.length; i++) {
+          for (var i = 0; i < response.data.length; i++) {
             $scope.addCabiMarker(response.data[i]);
           }
         }
