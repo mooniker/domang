@@ -10,12 +10,12 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.13.4",
-    "geolib": "^2.0.18",
-    "moment": "^2.11.2",
-    "mongoose": "^4.4.5",
+    "geolib": "^2.0.21",
+    "moment": "^2.13.0",
+    "mongoose": "^4.4.19",
     "node-capital-bikeshare": "^1.2.1",
-    "request": "^2.69.0",
-    "xml2json": "^0.9.0"
+    "request": "^2.72.0",
+    "xml2json": "^0.9.1"
   },
   "devDependencies": {},
   "repository": {
